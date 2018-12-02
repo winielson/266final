@@ -943,20 +943,19 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 		// do the damage
 		T_Damage (tr.ent, self, self, vec3_origin, tr.ent->s.origin, vec3_origin, damage, kick / 2, DAMAGE_ENERGY, mod); // Time to Slice my friends
 		
-		//gi.sound (self, CHAN_WEAPON, gi.soundindex("weapons/hitw1.wav") , 1, ATTN_IDLE, 0); // Used for my Punch.
-		gi.sound(self, CHAN_WEAPON, gi.soundindex("insane/insane7.wav"), 1, ATTN_IDLE, 0); // Used for my Punch.
-		//gi.soundindex("weapons/bfg__l1a.wav");
-		//Rename and use for whatever
+		gi.sound (self, CHAN_WEAPON, gi.soundindex("berserk/who.wav") , 1, ATTN_IDLE, 0); // Used for my Punch.
+		//gi.sound(self, CHAN_WEAPON, gi.soundindex("insane/insane7.wav"), 1, ATTN_IDLE, 0); // Used for my Punch.
 
 		if(!quiet)
-			gi.sound(self, CHAN_WEAPON, gi.soundindex("insane/insane7.wav"), 1, ATTN_NORM, 0); // Don't change this. 
-			//gi.sound (self, CHAN_WEAPON, gi.soundindex ("weapons/meatht.wav") , 1, ATTN_NORM, 0); // Don't change this. 
+			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); // Don't change this. 
+			//gi.sound(self, CHAN_WEAPON, gi.soundindex("insane/insane7.wav"), 1, ATTN_NORM, 0); // Don't change this. 
+			
 		//This is only used if your weapon is not quiet.. Chainfist isn't quiet, knife is
 	}
 	else
 	{
 		if (!quiet)
-		gi.sound(self, CHAN_WEAPON, gi.soundindex("insane/insane11.wav"), 1, ATTN_NORM, 0);
+			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0);
 
 		VectorScale (tr.plane.normal, 256, point);
 		gi.WriteByte (svc_temp_entity);
@@ -964,8 +963,8 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 		gi.WritePosition (tr.endpos);
 		gi.WriteDir (point);
 		gi.multicast (tr.endpos, MULTICAST_PVS);
-		//gi.sound (self, CHAN_AUTO, gi.soundindex("weapons/phitw2.wav"), 1, ATTN_NORM, 0);  
-		gi.sound(self, CHAN_AUTO, gi.soundindex("insane/insane5.wav"), 1, ATTN_NORM, 0); //hit wall sound 
+		gi.sound (self, CHAN_AUTO, gi.soundindex("berserk/theme.wav"), 1, ATTN_NORM, 0); //batman theme when wall is hit
+		//gi.sound(self, CHAN_AUTO, gi.soundindex("insane/insane5.wav"), 1, ATTN_NORM, 0); //hit wall sound 
 		//gi.soundindex("weapons/bfg__l1a.wav");//
 	}
 }

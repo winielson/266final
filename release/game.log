@@ -1,4 +1,4 @@
-﻿Build started 12/2/2018 3:11:44 PM.
+﻿Build started 12/2/2018 5:51:41 PM.
      1>Project "C:\Program Files (x86)\Steam\steamapps\common\Quake 2\final\game.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Z7 /nologo /W1 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _WINDLL /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\release/" /Fd".\release/vc120.pdb" /Gd /TC /analyze- /errorReport:prompt g_weapon.c
@@ -60,4 +60,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.49
+Time Elapsed 00:00:00.48

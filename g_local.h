@@ -214,6 +214,7 @@ typedef struct
 #define WEAP_HYPERBLASTER		9 
 #define WEAP_RAILGUN			10
 #define WEAP_BFG				11
+#define WEAP_GRAPPLE			12 //BIGBOY
 
 /*
 #define WEAP_NULL				1
@@ -496,6 +497,7 @@ extern	int	body_armor_index;
 #define MOD_TRIGGER_HURT	31
 #define MOD_HIT				32
 #define MOD_TARGET_BLASTER	33
+#define MOD_GRAPPLE			34 //BIGBOY
 #define MOD_FRIENDLY_FIRE	0x8000000
 
 //BIGBOY
@@ -736,6 +738,12 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick);
 void fire_bfg (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius);
 
+/* BIGBOY GRAPPLE */
+void CTFWeapon_Grapple(edict_t *ent);
+void CTFPlayerResetGrapple(edict_t *ent);
+void CTFGrapplePull(edict_t *self);
+void CTFResetGrapple(edict_t *self);
+
 //
 // g_ptrail.c
 //
@@ -958,6 +966,10 @@ struct gclient_s
 	int			flood_whenhead;		// head pointer for when said
 
 	float		respawn_time;		// can respawn when time > this
+
+	void *ctf_grapple;              /* entity of grapple */
+	int ctf_grapplestate;               /* true if pulling */
+	float ctf_grapplereleasetime;       /* time of grapple release */
 
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?

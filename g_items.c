@@ -1277,6 +1277,32 @@ gitem_t	itemlist[] =
 	// WEAPONS 
 	//
 
+	/* BIGBOY
+	* weapon_grapple (.3 .3 1) (-16 -16 -16) (16 16 16)
+	* always owned, never in the world
+	
+	{
+		"weapon_grapple",
+		NULL,
+		Use_Weapon,
+		NULL,
+		CTFWeapon_Grapple,
+		"misc/w_pkup.wav",
+		NULL, 0,
+		"models/weapons/grapple/tris.md2",
+		"w_grapple",
+		"Grapple",
+		0,
+		0,
+		NULL,
+		IT_WEAPON,
+		WEAP_GRAPPLE,
+		NULL,
+		0,
+
+		"weapons/grapple/grfire.wav weapons/grapple/grpull.wav weapons/grapple/grhang.wav weapons/grapple/grreset.wav weapons/grapple/grhit.wav"
+	},
+	*/
 	//BIGBOY
 	//Null weapon/Fists
 	{

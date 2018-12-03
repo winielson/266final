@@ -937,8 +937,9 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 	if (tr.ent->takedamage == DAMAGE_YES || tr.ent->takedamage == DAMAGE_AIM)
 	{
 		// pull the player forward if you dodamage
-		VectorMA(self ->velocity, 75, forward, self->velocity); // Pull forward
-		VectorMA(self ->velocity, 75, up, self->velocity); // Pull up a tad bit. You can't slide
+		VectorMA(self->velocity, 75, forward, self->velocity); // Pull forward
+//		VectorMA(self->velocity, 75, up, self->velocity); // Pull up a tad bit. You can't slide
+		VectorMA(self->velocity, 75, up, self->velocity); // Pull up a tad bit. You can't slide
 
 		// do the damage
 		T_Damage (tr.ent, self, self, vec3_origin, tr.ent->s.origin, vec3_origin, damage, kick / 2, DAMAGE_ENERGY, mod); // Time to Slice my friends
@@ -952,7 +953,7 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 			
 		//This is only used if your weapon is not quiet.. Chainfist isn't quiet, knife is
 	}
-	else
+	else //something else is hit like wall
 	{
 		if (!quiet)
 			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0);

@@ -691,6 +691,46 @@ GRENADE LAUNCHER
 
 void weapon_grenadelauncher_fire (edict_t *ent)
 {
+	/*
+	vec3_t	offset, start;
+	vec3_t	forward, right;
+	int		damage;
+	float	damage_radius;
+	int		radius_damage;
+
+	damage = 100 + (int)(random() * 20.0);
+	radius_damage = 120;
+	damage_radius = 300;
+	//damage_radius = 120;
+	if (is_quad)
+	{
+		damage *= 4;
+		radius_damage *= 4;
+	}
+
+	AngleVectors(ent->client->v_angle, forward, right, NULL);
+
+	VectorScale(forward, -2, ent->client->kick_origin);
+	ent->client->kick_angles[0] = -1;
+
+	VectorSet(offset, 8, 8, ent->viewheight - 8);
+	P_ProjectSource(ent->client, ent->s.origin, offset, forward, right, start);
+	fire_rocket(ent, start, forward, damage, 650, damage_radius, radius_damage);
+
+	// send muzzle flash
+	gi.WriteByte(svc_muzzleflash);
+	gi.WriteShort(ent - g_edicts);
+	gi.WriteByte(MZ_SILENCED | is_silenced);
+	//	gi.WriteByte (MZ_ROCKET | is_silenced);
+	gi.multicast(ent->s.origin, MULTICAST_PVS);
+
+	ent->client->ps.gunframe++;
+
+	PlayerNoise(ent, start, PNOISE_WEAPON);
+
+	if (!((int)dmflags->value & DF_INFINITE_AMMO))
+		ent->client->pers.inventory[ent->client->ammo_index]--;
+	*/
 	vec3_t	offset;
 	vec3_t	forward, right;
 	vec3_t	start;
@@ -721,6 +761,7 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	
 }
 
 void Weapon_GrenadeLauncher (edict_t *ent)
@@ -749,7 +790,8 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 
 	damage = 100 + (int)(random() * 20.0);
 	radius_damage = 120;
-	damage_radius = 120;
+	damage_radius = 300;
+	//damage_radius = 120;
 	if (is_quad)
 	{
 		damage *= 4;
@@ -768,7 +810,8 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);
-	gi.WriteByte (MZ_ROCKET | is_silenced);
+	gi.WriteByte(MZ_SILENCED | is_silenced);
+	//	gi.WriteByte (MZ_ROCKET | is_silenced);
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
 
 	ent->client->ps.gunframe++;
@@ -1476,7 +1519,7 @@ void Weapon_Null (edict_t *ent)
 
 	Weapon_Generic (ent, 3, 9, 22, 24, pause_frames, fire_frames, Null_Fire);
 }
-//BIGBOY GRAPPLE SOURCE CODE:https://github.com/yquake2/ctf/tree/master/src
+//BIGBOYGRAPPLE SOURCE CODE:https://github.com/yquake2/ctf/tree/master/src
 void CTFPlayerResetGrapple(edict_t *ent)
 {
 	if (ent->client && ent->client->ctf_grapple)

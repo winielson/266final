@@ -507,7 +507,7 @@ void P_FallingDamage (edict_t *ent)
 	}
 	delta = delta*delta * 0.0001;
 
-	//BIGBOY GRAPPLE
+	//BIGBOYGRAPPLE
 	/* never take damage if just release grapple or on grapple */
 	if ((level.time - ent->client->ctf_grapplereleasetime <= FRAMETIME * 2) ||
 		(ent->client->ctf_grapple &&
@@ -909,7 +909,7 @@ newanim:
 
 	if (!ent->groundentity)
 	{
-		/* BIGBOY GRAPPLE if on grapple, don't go into jump
+		/* BIGBOYGRAPPLE if on grapple, don't go into jump
 		frame, go into standing frame */
 		if (client->ctf_grapple)
 		{

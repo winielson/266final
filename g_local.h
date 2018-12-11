@@ -743,7 +743,7 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick);
 void fire_bfg (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius);
 
-/* BIGBOY GRAPPLE */
+/* BIGBOYGRAPPLE */
 void CTFWeapon_Grapple(edict_t *ent);
 void CTFPlayerResetGrapple(edict_t *ent);
 void CTFGrapplePull(edict_t *self);
@@ -877,7 +877,11 @@ typedef struct
 	int			helpchanged;
 
 	qboolean	spectator;			// client is a spectator
-	int			grabbing; //BIGBOY
+
+	//BIGBOY
+	int			grabbing; 
+	qboolean	homing_state;	// are homing missiles activated
+
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns
@@ -980,7 +984,7 @@ struct gclient_s
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?
 
-	//BIGBOY grapple
+	//BIGBOYGRAPPLE
 	qboolean	hanging;
 	vec3_t		hang_point;
 	float		flip_time;

@@ -1279,7 +1279,7 @@ gitem_t	itemlist[] =
 	// WEAPONS 
 	//
 
-	/* BIGBOY GRAPPLE
+	/* BIGBOYGRAPPLE
 	* weapon_grapple (.3 .3 1) (-16 -16 -16) (16 16 16)
 	* always owned, never in the world
 	*/
@@ -1484,10 +1484,10 @@ always owned, never in the world
 		"models/weapons/g_launch/tris.md2", EF_ROTATE,
 		"models/weapons/v_launch/tris.md2",
 /* icon */		"w_glauncher",
-/* pickup */	"Grenade Launcher",
+/* pickup */	"Explosive BRangs",
 		0,
 		1,
-		"Grenades",
+		"Rockets",//"Grenades",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_GRENADELAUNCHER,
 		NULL,
@@ -1504,10 +1504,11 @@ always owned, never in the world
 		Drop_Weapon,
 		Weapon_RocketLauncher,
 		"misc/w_pkup.wav",
-		"models/weapons/g_rocket/tris.md2", EF_ROTATE,
-		"models/weapons/v_rocket/tris.md2",
+		"models/weapons/g_rocket/tris.md2",
+		EF_ROTATE,
+		NULL,// "models/weapons/v_rocket/tris.md2",
 /* icon */		"w_rlauncher",
-/* pickup */	"Rocket Launcher",
+/* pickup */	"Homing BRangs",//"Rocket Launcher",
 		0,
 		1,
 		"Rockets",
@@ -1515,7 +1516,7 @@ always owned, never in the world
 		WEAP_ROCKETLAUNCHER,
 		NULL,
 		0,
-/* precache */ "models/objects/rocket/tris.md2 weapons/rockfly.wav weapons/rocklf1a.wav weapons/rocklr1b.wav models/objects/debris2/tris.md2"
+/* precache */ ""//"models/objects/rocket/tris.md2 weapons/rockfly.wav weapons/rocklf1a.wav weapons/rocklr1b.wav models/objects/debris2/tris.md2"
 	},
 
 /*QUAKED weapon_hyperblaster (.3 .3 1) (-16 -16 -16) (16 16 16)

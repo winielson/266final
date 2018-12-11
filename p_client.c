@@ -636,6 +636,9 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.max_cells		= 200;
 	client->pers.max_slugs		= 50;
 
+	//BIGBOYHOMING
+	client->pers.homing_state = 1; //Homing state is auto on
+
 	client->pers.connected = true;
 }
 
@@ -1748,7 +1751,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 			}
 		}
 
-		if (client->ctf_grapple) //BIGBOY GRAPPLE
+		if (client->ctf_grapple) //BIGBOYGRAPPLE
 		{
 			CTFGrapplePull(client->ctf_grapple);
 		}

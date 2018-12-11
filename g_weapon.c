@@ -588,14 +588,67 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	T_RadiusDamage(ent, ent->owner, ent->radius_dmg, other, ent->dmg_radius, MOD_R_SPLASH);
 
 	gi.WriteByte (svc_temp_entity);
+	/*
 	if (ent->waterlevel)
 		gi.WriteByte (TE_ROCKET_EXPLOSION_WATER);
 	else
-		gi.WriteByte (TE_ROCKET_EXPLOSION);
+		gi.WriteByte (TE_ROCKET_EXPLOSION); 
+	*/
+	gi.WriteByte(TE_ROCKET_EXPLOSION);
+
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
 
 	G_FreeEdict (ent);
+}
+
+// BIGBOYHOMING source: https://www.quakewiki.net/archives/qdevels/quake2/25_12_97a.html
+void homing_think(edict_t *ent)
+{
+	edict_t	*target = NULL;
+	edict_t *blip = NULL;
+	vec3_t	targetdir, blipdir;
+	vec_t	speed;
+
+	//while ((blip = findradius(blip, ent->s.origin, 1000)) != NULL)
+	while ((blip = findradius(blip, ent->s.origin, 500)) != NULL)
+	{
+		if (!(blip->svflags & SVF_MONSTER) && !blip->client)
+			continue;
+		if (blip == ent->owner)
+			continue;
+		if (!blip->takedamage)
+			continue;
+		if (blip->health <= 0)
+			continue;
+		if (!visible(ent, blip))
+			continue;
+		if (!infront(ent, blip))
+			continue;
+		VectorSubtract(blip->s.origin, ent->s.origin, blipdir);
+		blipdir[2] = 16;
+		if ((target == NULL) || (VectorLength(blipdir) < VectorLength(targetdir)))
+		{
+			target = blip;
+			VectorCopy(blipdir, targetdir);
+		}
+	}
+
+	if (target != NULL)
+	{
+		// target acquired, nudge our direction toward it
+		VectorNormalize(targetdir);
+		//VectorScale(targetdir, 0.2, targetdir);
+		VectorScale(targetdir, 1, targetdir);
+		VectorAdd(targetdir, ent->movedir, targetdir);
+		VectorNormalize(targetdir);
+		VectorCopy(targetdir, ent->movedir);
+		vectoangles(targetdir, ent->s.angles);
+		speed = VectorLength(ent->velocity);
+		VectorScale(targetdir, speed, ent->velocity);
+	}
+
+	ent->nextthink = level.time;// +.1;
 }
 
 void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
@@ -610,19 +663,46 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->movetype = MOVETYPE_FLYMISSILE;
 	rocket->clipmask = MASK_SHOT;
 	rocket->solid = SOLID_BBOX;
-	rocket->s.effects |= EF_ROCKET;
+	rocket->s.effects |= EF_GIB;
+	//rocket->s.effects |= EF_ROCKET;
 	VectorClear (rocket->mins);
 	VectorClear (rocket->maxs);
-	rocket->s.modelindex = gi.modelindex ("models/objects/rocket/tris.md2");
+
+	rocket->s.modelindex = gi.modelindex("models/objects/debris1/tris.md2"); //bomb debris1 2 3 banner ships/bigviper strogg1  monsters/tank
+	//rocket->s.modelindex = gi.modelindex ("models/objects/black/tris.md2"); //crazy sphere thing dmspot is pizzabox
+	//rocket->s.modelindex = gi.modelindex("models/objects/rocket/tris.md2"); 
+
 	rocket->owner = self;
 	rocket->touch = rocket_touch;
-	rocket->nextthink = level.time + 8000/speed;
-	rocket->think = G_FreeEdict;
+	//rocket->nextthink = level.time + 8000/speed;
+	//rocket->think = G_FreeEdict;
+
+	// BIGBOYHOMING
+	if (self->client && self->client->pers.homing_state)
+	{
+		// CCH: if they have 5 cells, start homing, otherwise normal rocket think
+		if (self->client->pers.inventory[ITEM_INDEX(FindItem("Cells"))] >= 5)
+		{
+			self->client->pers.inventory[ITEM_INDEX(FindItem("Cells"))] -= 5;
+			rocket->nextthink = level.time + .1;
+			rocket->think = homing_think;
+		}
+		else {
+			gi.cprintf(self, PRINT_HIGH, "No cells for homing missile.\n");
+			rocket->nextthink = level.time + 8000 / speed;
+			rocket->think = G_FreeEdict;
+		}
+	}
+	else {
+		rocket->nextthink = level.time + 8000 / speed;
+		rocket->think = G_FreeEdict;
+	}
+
 	rocket->dmg = damage;
 	rocket->radius_dmg = radius_damage;
 	rocket->dmg_radius = damage_radius;
-	rocket->s.sound = gi.soundindex ("weapons/rockfly.wav"); //"weapons/bfg__l1a.wav"
-	//rocket->s.sound = gi.soundindex("weapons/bfg__l1a.wav");
+	//rocket->s.sound = gi.soundindex ("weapons/rockfly.wav"); //"weapons/bfg__l1a.wav"
+	rocket->s.sound = gi.soundindex ("gladiator/melee3.wav"); //"weapons/bfg__l1a.wav"
 	rocket->classname = "rocket";
 
 	if (self->client)
@@ -887,12 +967,6 @@ void fire_bfg (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, f
 	bfg->dmg_radius = damage_radius;
 	bfg->classname = "bfg blast";
 	bfg->s.sound = gi.soundindex ("weapons/bfg__l1a.wav");
-
-
-	//bfg->s.sound = gi.soundindex("weapons/rockfly.wav");
-	//bfg->s.sound = gi.soundindex ("weapons/bfg__l1a.wav");
-	//rocket->s.sound = gi.soundindex ("weapons/rockfly.wav");
-
 	bfg->think = bfg_think;
 	bfg->nextthink = level.time + FRAMETIME;
 	bfg->teammaster = bfg;
@@ -970,6 +1044,6 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 	}
 }
 
-//BIGBOY GRAPPLE
+//BIGBOYGRAPPLE
 
 

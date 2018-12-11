@@ -413,8 +413,10 @@ void TossClientWeapon (edict_t *self)
 	item = self->client->pers.weapon;
 	if (!self->client->pers.inventory[self->client->ammo_index])
 		item = NULL;
-	if (item && (strcmp(item->pickup_name, "Hands") == 0))
+	if (item && (strcmp(item->pickup_name, "Hands") == 0)) //recentch
 		item = NULL;
+	//if (item && (strcmp(item->pickup_name, "Grapple") == 0))
+		//item = NULL;
 
 	//if (ent->client->pers.inventory[ITEM_INDEX(FindItem("shells" &#41; &#41; &#93;
 
@@ -522,6 +524,8 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 		self->client->ps.pmove.pm_type = PM_DEAD;
 		ClientObituary (self, inflictor, attacker);
 		TossClientWeapon (self);
+		CTFPlayerResetGrapple(self); //BIGBOY
+
 		if (deathmatch->value)
 			Cmd_Help_f (self);		// show scores
 
@@ -612,7 +616,11 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.inventory[client->pers.selected_item] = 1;
 	*/
 
-	item = FindItem("Hands");
+	//gi.soundindex("berserk/theme.wav"); //batman theme at start
+
+	item = FindItem("Hands"); //Start weapon == hands
+	//item = FindItem("Grapple");
+	
 	client->pers.selected_item = ITEM_INDEX(item);
 	client->pers.inventory[client->pers.selected_item] = 1;
 
@@ -1309,6 +1317,7 @@ void ClientBegin (edict_t *ent)
 	int		i;
 
 	ent->client = game.clients + (ent - g_edicts - 1);
+	//gi.soundindex("berserk/theme.wav"); //batman theme at start
 
 	if (deathmatch->value)
 	{
@@ -1684,6 +1693,64 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		{
 			VectorCopy (pm.viewangles, client->v_angle);
 			VectorCopy (pm.viewangles, client->ps.viewangles);
+		}
+
+		//BIGBOY
+		//handle cloaking ability https://www.quakewiki.net/archives/qdevels/quake2/7_9_98d.html
+		if (ent->client->cloakable)
+		{
+			//VectorCopy(pm.viewangles, client->v_angle);
+			//VectorCopy(pm.viewangles, client->ps.viewangles);
+
+			if (ucmd->forwardmove != 0 || ucmd->sidemove != 0) 			//if (ucmd->crouch != 0)
+			{
+				ent->svflags &= ~SVF_NOCLIENT;
+				ent->client->cloaking = false;
+			}
+			else
+			{
+				if (ent->svflags & SVF_NOCLIENT)
+				{
+					if (ent->client->pers.inventory[ITEM_INDEX(FindItem("Cells"))] >= CLOAK_AMMO)
+					{
+						ent->client->cloakdrain++;
+						if (ent->client->cloakdrain == CLOAK_DRAIN)
+						{
+							ent->client->pers.inventory[ITEM_INDEX(FindItem("Cells"))] -= CLOAK_AMMO;
+							ent->client->cloakdrain = 0;
+						}
+					}
+					else
+					{
+						ent->svflags &= ~SVF_NOCLIENT;
+						ent->client->cloaking = false;
+					}
+				}
+				else
+				{
+					if (ent->client->cloaking)
+					{
+						if (level.time > ent->client->cloaktime)
+						{
+							gi.centerprintf(ent, "Unseen\n");
+							//gi.sound(ent, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0);
+							ent->svflags |= SVF_NOCLIENT;
+							//ent->svflags = SVF_NOCLIENT;
+							ent->client->cloakdrain = 0;
+						}
+					}
+					else
+					{
+						ent->client->cloaktime = level.time + CLOAK_ACTIVATE_TIME;
+						ent->client->cloaking = true;
+					}
+				}
+			}
+		}
+
+		if (client->ctf_grapple) //BIGBOY GRAPPLE
+		{
+			CTFGrapplePull(client->ctf_grapple);
 		}
 
 		gi.linkentity (ent);

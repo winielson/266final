@@ -970,3 +970,6 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 	}
 }
 
+//BIGBOY GRAPPLE
+
+

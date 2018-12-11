@@ -544,6 +544,7 @@ void target_laser_on (edict_t *self)
 		self->activator = self;
 	self->spawnflags |= 0x80000001;
 	self->svflags &= ~SVF_NOCLIENT;
+	//self->svflags |= SVF_NOCLIENT;
 	target_laser_think (self);
 }
 

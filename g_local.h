@@ -676,6 +676,11 @@ void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_
 #define DEFAULT_SHOTGUN_COUNT	12
 #define DEFAULT_SSHOTGUN_COUNT	20
 
+//BIGBOY flags
+#define CLOAK_ACTIVATE_TIME			.5		// cloak after 1.5 seconds
+#define CLOAK_DRAIN					2		// every CLOAK_DRAIN frames,
+#define CLOAK_AMMO					0		// drain CLOAK_AMMO amount of cells
+
 //
 // g_monster.c
 //
@@ -960,7 +965,7 @@ struct gclient_s
 	int			silencer_shots;
 	int			weapon_sound;
 
-	float		pickup_msg_time;
+	float		pickup_msg_time; // can respawn when time > this
 
 	float		flood_locktill;		// locked from talking
 	float		flood_when[10];		// when messages were said
@@ -975,11 +980,16 @@ struct gclient_s
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?
 
-	//BIGBOY
+	//BIGBOY grapple
 	qboolean	hanging;
 	vec3_t		hang_point;
 	float		flip_time;
 
+	//BIGBOY cloak
+	qboolean	cloakable;
+	qboolean	cloaking;
+	float		cloaktime;
+	int			cloakdrain;
 };
 
 

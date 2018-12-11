@@ -20,6 +20,7 @@ void Weapon_BFG (edict_t *ent);
 //BIGBOY
 void Weapon_Null (edict_t *ent);
 
+
 gitem_armor_t jacketarmor_info	= { 25,  50, .30, .00, ARMOR_JACKET};
 gitem_armor_t combatarmor_info	= { 50, 100, .60, .30, ARMOR_COMBAT};
 gitem_armor_t bodyarmor_info	= {100, 200, .80, .60, ARMOR_BODY};
@@ -119,6 +120,7 @@ void DoRespawn (edict_t *ent)
 			;
 	}
 
+	CTFPlayerResetGrapple(ent); //recentch
 	ent->svflags &= ~SVF_NOCLIENT;
 	ent->solid = SOLID_TRIGGER;
 	gi.linkentity (ent);
@@ -1277,32 +1279,35 @@ gitem_t	itemlist[] =
 	// WEAPONS 
 	//
 
-	/* BIGBOY
+	/* BIGBOY GRAPPLE
 	* weapon_grapple (.3 .3 1) (-16 -16 -16) (16 16 16)
 	* always owned, never in the world
-	
+	*/
+
 	{
 		"weapon_grapple",
-		NULL,
+		Pickup_Weapon, //NULL,
 		Use_Weapon,
-		NULL,
+		Drop_Weapon, // Function to use to drop weapon NULL,
 		CTFWeapon_Grapple,
 		"misc/w_pkup.wav",
-		NULL, 0,
+		"models/weapons/g_flareg/tris.md2", //Item model for placement on maps 
+		EF_ROTATE, //Flags 0,
 		"models/weapons/grapple/tris.md2",
-		"w_grapple",
+		"w_grap", //w_grapple is invalid file name for some reason
 		"Grapple",
 		0,
 		0,
 		NULL,
 		IT_WEAPON,
 		WEAP_GRAPPLE,
+		//WEAP_SHOTGUN,
 		NULL,
 		0,
 
 		"weapons/grapple/grfire.wav weapons/grapple/grpull.wav weapons/grapple/grhang.wav weapons/grapple/grreset.wav weapons/grapple/grhit.wav"
 	},
-	*/
+	
 	//BIGBOY
 	//Null weapon/Fists
 	{
@@ -1344,7 +1349,7 @@ always owned, never in the world
 		0,
 		NULL,
 		IT_WEAPON|IT_STAY_COOP,
-		//WEAP_BLASTER, BIGBOY
+		//WEAP_BLASTER, replaced hand's  model index with blaster's
 		NULL,
 		NULL,
 		0,
@@ -1368,7 +1373,8 @@ always owned, never in the world
 		1,
 		"Shells",
 		IT_WEAPON|IT_STAY_COOP,
-		WEAP_SHOTGUN,
+		//WEAP_SHOTGUN,
+		NULL,
 		NULL,
 		0,
 /* precache */ "weapons/shotgf1b.wav weapons/shotgr1b.wav"

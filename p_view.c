@@ -420,6 +420,10 @@ void SV_CalcBlend (edict_t *ent)
 	else if (contents & CONTENTS_WATER)
 		SV_AddBlend (0.5, 0.3, 0.2, 0.4, ent->client->ps.blend);
 
+	// BIGBOY NEW CODE: cloaked - darken vision
+	if (ent->client->cloakable && (ent->svflags & SVF_NOCLIENT))
+		SV_AddBlend(-1, -1, -1, 0.3, ent->client->ps.blend);
+
 	// add for powerups
 	if (ent->client->quad_framenum > level.framenum)
 	{
@@ -502,6 +506,15 @@ void P_FallingDamage (edict_t *ent)
 		delta = ent->velocity[2] - ent->client->oldvelocity[2];
 	}
 	delta = delta*delta * 0.0001;
+
+	//BIGBOY GRAPPLE
+	/* never take damage if just release grapple or on grapple */
+	if ((level.time - ent->client->ctf_grapplereleasetime <= FRAMETIME * 2) ||
+		(ent->client->ctf_grapple &&
+		(ent->client->ctf_grapplestate > CTF_GRAPPLE_STATE_FLY)))
+	{
+		return;
+	}
 
 	// never take falling damage if completely underwater
 	if (ent->waterlevel == 3)
@@ -796,6 +809,8 @@ G_SetClientSound
 void G_SetClientSound (edict_t *ent)
 {
 	char	*weap;
+	//gi.sound(ent, CHAN_VOICE, gi.soundindex("berserk/theme.wav"), 1, ATTN_STATIC, 0); BIGBOY WORKS BUT IS BUGED
+
 
 	if (ent->client->pers.game_helpchanged != game.helpchanged)
 	{
@@ -894,10 +909,20 @@ newanim:
 
 	if (!ent->groundentity)
 	{
-		client->anim_priority = ANIM_JUMP;
-		if (ent->s.frame != FRAME_jump2)
-			ent->s.frame = FRAME_jump1;
-		client->anim_end = FRAME_jump2;
+		/* BIGBOY GRAPPLE if on grapple, don't go into jump
+		frame, go into standing frame */
+		if (client->ctf_grapple)
+		{
+			ent->s.frame = FRAME_stand01;
+			client->anim_end = FRAME_stand40;
+		}
+		else
+		{
+			client->anim_priority = ANIM_JUMP;
+			if (ent->s.frame != FRAME_jump2)
+				ent->s.frame = FRAME_jump1;
+			client->anim_end = FRAME_jump2;
+		}
 	}
 	else if (run)
 	{	// running

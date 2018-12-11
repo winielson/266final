@@ -880,6 +880,30 @@ void Cmd_PlayerList_f(edict_t *ent)
 	gi.cprintf(ent, PRINT_HIGH, "%s", text);
 }
 
+/*
+==================
+Cmd_Cloak_f BIGBOY
+==================
+*/
+
+void Cmd_Cloak_f(edict_t *ent)
+{
+	if (ent->client->cloakable ^= 1) //toggles variable
+	{
+		gi.centerprintf(ent, "Motion Cloaking Enabled!\n");
+		ent->client->cloaktime = level.time + CLOAK_ACTIVATE_TIME;
+		//ent->svflags |= SVF_NOCLIENT;
+		//ent->svflags = SVF_NOCLIENT;
+		ent->client->cloaking = true;
+		ent->client->cloakdrain = 0;
+	}
+	else
+	{
+		gi.centerprintf(ent, "Motion Cloaking Disabled!\n");
+		ent->svflags &= ~SVF_NOCLIENT;
+		ent->client->cloaking = false;
+	}
+}
 
 /*
 =================
@@ -930,8 +954,8 @@ void ClientCommand (edict_t *ent)
 		Cmd_Drop_f (ent);
 	else if (Q_stricmp (cmd, "give") == 0)
 		Cmd_Give_f (ent);
-	else if (Q_stricmp (cmd, "god") == 0)
-		Cmd_God_f (ent);
+	else if (Q_stricmp(cmd, "god") == 0)
+		Cmd_God_f(ent);
 	else if (Q_stricmp (cmd, "notarget") == 0)
 		Cmd_Notarget_f (ent);
 	else if (Q_stricmp (cmd, "noclip") == 0)
@@ -968,10 +992,14 @@ void ClientCommand (edict_t *ent)
 		Cmd_Wave_f (ent);
 	else if (Q_stricmp(cmd, "playerlist") == 0)
 		Cmd_PlayerList_f(ent);
-	else if (Q_stricmp(cmd, "action_on") == 0)
+	else if (Q_stricmp(cmd, "action_on") == 0) 
 		Cmd_Action_On(ent);
-	else if (Q_stricmp(cmd, "action_off") == 0)
+	else if (Q_stricmp(cmd, "action_off") == 0) //BIGBOY
 		Cmd_Action_Off(ent);
+	else if (Q_stricmp(cmd, "cloak") == 0){
+		Cmd_Cloak_f(ent);
+		//ent->svflags |= SVF_NOCLIENT;
+	}
 	//else if (Q_stricmp(cmd, "climb") == 0) //BIGBOY grab command
 		//Grab_n_Climb(ent);
 	else	// anything that doesn't match a command will be a chat

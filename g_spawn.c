@@ -847,6 +847,7 @@ void SP_worldspawn (edict_t *ent)
 
 	gi.soundindex ("misc/pc_up.wav");
 	gi.soundindex ("misc/talk1.wav");
+	//gi.soundindex("berserk/theme.wav");
 
 	gi.soundindex ("misc/udeath.wav");
 
@@ -886,6 +887,7 @@ void SP_worldspawn (edict_t *ent)
 	gi.modelindex ("#w_hyperblaster.md2");
 	gi.modelindex ("#w_railgun.md2");
 	gi.modelindex ("#w_bfg.md2");
+	gi.modelindex("#w_grapple.md2"); //BIGBOY GRAPPLE
 
 	//-------------------
 

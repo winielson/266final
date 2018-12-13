@@ -752,7 +752,8 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 
 	gi.WriteByte (svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);
-	gi.WriteByte (MZ_GRENADE | is_silenced);
+	gi.WriteByte(MZ_NUKE1 | is_silenced);
+	//gi.WriteByte (MZ_GRENADE | is_silenced);
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
 
 	ent->client->ps.gunframe++;
@@ -790,7 +791,7 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 
 	damage = 100 + (int)(random() * 20.0);
 	radius_damage = 120;
-	damage_radius = 300;
+	damage_radius = 0;
 	//damage_radius = 120;
 	if (is_quad)
 	{
@@ -810,7 +811,7 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);
-	gi.WriteByte(MZ_SILENCED | is_silenced);
+	gi.WriteByte(MZ_NUKE4 | is_silenced); //Homing brang fire noise and effect
 	//	gi.WriteByte (MZ_ROCKET | is_silenced);
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
 

@@ -464,7 +464,8 @@ static void Grenade_Touch (edict_t *ent, edict_t *other, cplane_t *plane, csurfa
 	Grenade_Explode (ent);
 }
 
-void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius)
+/*
+void fire_grenade(edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius)
 {
 	edict_t	*grenade;
 	vec3_t	dir;
@@ -496,6 +497,45 @@ void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int s
 
 	gi.linkentity (grenade);
 }
+*/
+
+//took rocket_fire for explosive brangs
+void fire_grenade(edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
+{
+	edict_t	*grenade;
+
+	grenade = G_Spawn();
+	VectorCopy(start, grenade->s.origin);
+	VectorCopy(dir, grenade->movedir);
+	vectoangles(dir, grenade->s.angles);
+	VectorScale(dir, speed, grenade->velocity);
+	grenade->movetype = MOVETYPE_FLYMISSILE;
+	grenade->clipmask = MASK_SHOT;
+	grenade->solid = SOLID_BBOX;
+	grenade->s.effects |= EF_GRENADE;
+	//grenade->s.effects |= EF_ROCKET;
+	VectorClear(grenade->mins);
+	VectorClear(grenade->maxs);
+	grenade->s.modelindex = gi.modelindex("models/objects/debris1/tris.md2");
+	//grenade->s.modelindex = gi.modelindex("models/objects/rocket/tris.md2");
+	grenade->owner = self;
+	grenade->touch = Grenade_Touch;
+	//grenade->touch = rocket_touch;
+	grenade->nextthink = level.time + 8000 / speed;
+	grenade->think = G_FreeEdict;
+	grenade->dmg = damage;
+	grenade->radius_dmg = radius_damage;
+	grenade->dmg_radius = damage_radius;
+	grenade->s.sound = gi.soundindex("gladiator/melee3.wav"); //"weapons/bfg__l1a.wav"
+	//grenade->s.sound = gi.soundindex("weapons/rockfly.wav");
+
+	grenade->classname = "grenade";
+
+	if (self->client)
+		check_dodge(self, grenade->s.origin, dir, speed);
+
+	gi.linkentity(grenade);
+}
 
 void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius, qboolean held)
 {
@@ -512,6 +552,7 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 	VectorMA (grenade->velocity, 200 + crandom() * 10.0, up, grenade->velocity);
 	VectorMA (grenade->velocity, crandom() * 10.0, right, grenade->velocity);
 	VectorSet (grenade->avelocity, 300, 300, 300);
+	//grenade->movetype = MOVETYPE_FLYMISSILE; 
 	grenade->movetype = MOVETYPE_BOUNCE;
 	grenade->clipmask = MASK_SHOT;
 	grenade->solid = SOLID_BBOX;
@@ -587,17 +628,29 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 
 	T_RadiusDamage(ent, ent->owner, ent->radius_dmg, other, ent->dmg_radius, MOD_R_SPLASH);
 
-	gi.WriteByte (svc_temp_entity);
+	//taken from blaster
+	gi.WriteByte(svc_temp_entity);
+	gi.WriteByte(TE_SPARKS);
+	gi.WritePosition(ent->s.origin);
+	if (!plane)
+		gi.WriteDir(vec3_origin);
+	else
+		gi.WriteDir(plane->normal);
+	gi.multicast(ent->s.origin, MULTICAST_PVS);
+
 	/*
+	gi.WriteByte (svc_temp_entity);
+	
 	if (ent->waterlevel)
 		gi.WriteByte (TE_ROCKET_EXPLOSION_WATER);
 	else
 		gi.WriteByte (TE_ROCKET_EXPLOSION); 
-	*/
+	
 	gi.WriteByte(TE_ROCKET_EXPLOSION);
 
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	*/
 
 	G_FreeEdict (ent);
 }
@@ -702,7 +755,7 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->radius_dmg = radius_damage;
 	rocket->dmg_radius = damage_radius;
 	//rocket->s.sound = gi.soundindex ("weapons/rockfly.wav"); //"weapons/bfg__l1a.wav"
-	rocket->s.sound = gi.soundindex ("gladiator/melee3.wav"); //"weapons/bfg__l1a.wav"
+	rocket->s.sound = gi.soundindex ("gladiator/melee3.wav"); 
 	rocket->classname = "rocket";
 
 	if (self->client)

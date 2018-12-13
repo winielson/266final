@@ -19,7 +19,7 @@ SOLID_BBOX,			// touch on edge
 SOLID_BSP			// bsp clip, touch on edge
 } solid_t;
 
-//BIGBOY
+//BIGBOYGRAPPLE
 typedef enum
 {
 	CTF_GRAPPLE_STATE_FLY,

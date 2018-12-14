@@ -534,10 +534,11 @@ void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_
 
 	while ((ent = findradius(ent, inflictor->s.origin, radius)) != NULL)
 	{
+		
 		if (ent == ignore)
 			continue;
-		if (!ent->takedamage)
-			continue;
+		//if (!ent->takedamage)
+			//continue;
 
 		VectorAdd (ent->mins, ent->maxs, v);
 		VectorMA (ent->s.origin, 0.5, v, v);
@@ -549,6 +550,7 @@ void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_
 		{
 			if (CanDamage (ent, inflictor))
 			{
+				//ignore->mnaded = 1; //BIGBOYMNADED crashes game when barrels are hit
 				VectorSubtract (ent->s.origin, inflictor->s.origin, dir);
 				T_Damage (ent, inflictor, attacker, dir, inflictor->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, mod);
 			}

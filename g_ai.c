@@ -3,6 +3,7 @@
 #include "g_local.h"
 
 qboolean FindTarget (edict_t *self);
+edict_t *FindMonster(edict_t *self);
 extern cvar_t	*maxclients;
 
 qboolean ai_checkattack (edict_t *self, float dist);
@@ -277,6 +278,7 @@ qboolean visible (edict_t *self, edict_t *other)
 	spot2[2] += other->viewheight;
 	trace = gi.trace (spot1, vec3_origin, vec3_origin, spot2, self, MASK_OPAQUE);
 	
+	//	if (trace.fraction == 1.0 && !other->client->cloaking)
 	if (trace.fraction == 1.0)
 		return true;
 	return false;
@@ -390,7 +392,20 @@ qboolean FindTarget (edict_t *self)
 	edict_t		*client;
 	qboolean	heardit;
 	int			r;
+	edict_t *monster;
 
+	//BIGBOYMNADE
+	if (self->monsterinfo.aiflags & AI_GOOD_GUY)
+	{
+		if (self->goalentity && self->goalentity->inuse && self->goalentity->classname)
+		{
+			if (strcmp(self->goalentity->classname, "target_actor") == 0)
+				return false;
+		}
+
+		return false;
+	}
+	/*
 	if (self->monsterinfo.aiflags & AI_GOOD_GUY)
 	{
 		if (self->goalentity && self->goalentity->inuse && self->goalentity->classname)
@@ -401,6 +416,21 @@ qboolean FindTarget (edict_t *self)
 
 		//FIXME look for monsters?
 		return false;
+	}
+	*/
+	//if (self->client->cloaking)
+		//return false;
+
+	//Look for monsters! BIGBOYMNADE
+	if (self->mnaded)
+	{
+		monster = FindMonster(self);
+		if (monster)
+		{
+			self->enemy = monster;
+			FoundTarget(self);
+			return true;
+		}
 	}
 
 	// if we're going to a combat point, just proceed
@@ -445,7 +475,8 @@ qboolean FindTarget (edict_t *self)
 		return false;
 
 	if (client == self->enemy)
-		return true;	// JDC false;
+		return false;
+		//return true;	// JDC false;
 
 	if (client->client)
 	{
@@ -555,7 +586,7 @@ qboolean FindTarget (edict_t *self)
 //
 // got one
 //
-	FoundTarget (self);
+	FoundTarget(self);
 
 	if (!(self->monsterinfo.aiflags & AI_SOUND_TARGET) && (self->monsterinfo.sight))
 		self->monsterinfo.sight (self, self->enemy);
@@ -563,6 +594,36 @@ qboolean FindTarget (edict_t *self)
 	return true;
 }
 
+//BIGBOYMNADE SOURCE: https://www.moddb.com/games/quake-2/tutorials/monsters-fighting-each-other
+edict_t *FindMonster(edict_t *self)
+{
+	edict_t	*ent = NULL;
+	edict_t	*best = NULL;
+
+	while ((ent = findradius(ent, self->s.origin, 1024)) != NULL)
+	{
+		if (ent == self)
+			continue;
+		if (!(ent->svflags & SVF_MONSTER))
+			continue;
+		if (!ent->health)
+			continue;
+		if (ent->health < 1)
+			continue;
+		if (!visible(self, ent))
+			continue;
+		if (!best)
+		{
+			best = ent;
+			continue;
+		}
+		if (ent->max_health <= best->max_health)
+			continue;
+		best = ent;
+	}
+
+	return best;
+}
 
 //=============================================================================
 

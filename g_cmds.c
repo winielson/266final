@@ -882,26 +882,41 @@ void Cmd_PlayerList_f(edict_t *ent)
 
 /*
 ==================
-Cmd_Cloak_f BIGBOY
+Cmd_Cloak_f BIGBOYCLOAK
 ==================
 */
 
 void Cmd_Cloak_f(edict_t *ent)
 {
-	if (ent->client->cloakable ^= 1) //toggles variable
+	if (level.time < ent->client->cloakcoold)
 	{
-		gi.centerprintf(ent, "Motion Cloaking Enabled!\n");
-		ent->client->cloaktime = level.time + CLOAK_ACTIVATE_TIME;
-		//ent->svflags |= SVF_NOCLIENT;
-		//ent->svflags = SVF_NOCLIENT;
+		gi.centerprintf(ent, "Cooling Down!\n Can't cloak!\n");
+		ent->flags &= ~FL_NOTARGET;
+		ent->client->cloakable = false;
+		if (level.time >= ent->client->cloakcoold)
+		{
+			gi.centerprintf(ent, "Cooldown done\n");
+			ent->client->incloakcoold = false;
+			ent->client->cloakable = true;
+		}
+	}
+	else if (ent->client->cloakable ^= 1) //toggles variable
+	{
+		//gi.centerprintf(ent, "Motion Cloaking Enabled!\n");
+		gi.sound(ent, CHAN_VOICE, gi.soundindex("berserk/amb.wav"), 1, ATTN_NORM, 0);
+		ent->client->cloaktime = level.time + CLOAK_ON_TIME;
+		ent->client->cloakacttime = level.time + CLOAK_ACTIVATE_TIME;
+		ent->client->cloakcoold = level.time + CLOAK_COOLDOWN_TIME;
 		ent->client->cloaking = true;
-		ent->client->cloakdrain = 0;
+		ent->client->incloakcoold = false;
 	}
 	else
 	{
 		gi.centerprintf(ent, "Motion Cloaking Disabled!\n");
-		ent->svflags &= ~SVF_NOCLIENT;
+		ent->flags &= ~FL_NOTARGET;
 		ent->client->cloaking = false;
+		ent->client->incloakcoold = true;
+
 	}
 }
 

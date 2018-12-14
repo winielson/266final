@@ -531,12 +531,12 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	vec3_t	offset;
 	vec3_t	forward, right;
 	vec3_t	start;
-	int		damage = 125;
+	int		damage = 0;
 	float	timer;
 	int		speed;
-	float	radius;
+	float	radius = 1000;
 
-	radius = damage+40;
+	//radius = damage+40;
 	if (is_quad)
 		damage *= 4;
 
@@ -770,7 +770,7 @@ void Weapon_GrenadeLauncher (edict_t *ent)
 	static int	pause_frames[]	= {34, 51, 59, 0};
 	static int	fire_frames[]	= {6, 0};
 
-	Weapon_Generic(ent, 5, 8, 59, 64, pause_frames, fire_frames, weapon_grenadelauncher_fire);
+	Weapon_Generic(ent, 5, 11, 59, 64, pause_frames, fire_frames, weapon_grenadelauncher_fire);
 	//Weapon_Generic (ent, 5, 16, 59, 64, pause_frames, fire_frames, weapon_grenadelauncher_fire);
 }
 
@@ -829,7 +829,7 @@ void Weapon_RocketLauncher (edict_t *ent)
 	static int	pause_frames[]	= {25, 33, 42, 50, 0};
 	static int	fire_frames[]	= {5, 0};
 
-	Weapon_Generic(ent, 4, 4, 50, 54, pause_frames, fire_frames, Weapon_RocketLauncher_Fire); //changed firerate
+	Weapon_Generic(ent, 4, 7, 50, 54, pause_frames, fire_frames, Weapon_RocketLauncher_Fire); //changed firerate
 	//Weapon_Generic (ent, 4, 12, 50, 54, pause_frames, fire_frames, Weapon_RocketLauncher_Fire);
 }
 
@@ -1462,7 +1462,7 @@ void Weapon_BFG (edict_t *ent)
 ======================================================================
 
 Punching/Melee
-BIGBOY
+BIGBOYMELEE
 
 ======================================================================
 */
@@ -1473,8 +1473,8 @@ void Null_Fire(edict_t *ent)
 	vec3_t		start;
 	vec3_t		forward, right;
 	vec3_t		angles;
-	int			damage = 50; //change to whatever
-	int			kick = 2; //ditto here
+	int			damage = 16; 
+	int			kick = 2; 
 	vec3_t		offset;
 
 	if (ent->client->ps.gunframe == 11 ) //rename 11 toafter you're attack frame
@@ -1492,7 +1492,7 @@ void Null_Fire(edict_t *ent)
 	//VectorSet(offset, 0, 30, ent->viewheight - 8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start); //where does the hit start from?
 
-	if (is_quad)
+	if (is_quad || ent->client->cloaking)
 	{
 		damage *= 4;
 		kick *= 4;
@@ -1505,7 +1505,7 @@ void Null_Fire(edict_t *ent)
 	//VectorSet(offset, 0, 30, ent->viewheight - 8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
 	//fire_punch(ent, start, forward, 45, damage, 200, 1, MOD_PUNCH); // yep, matches the fire_ function	
-	fire_punch(ent, start, forward, 45, damage, kick, 0, MOD_PUNCH); // yep, matches the fire_ function	
+	fire_punch(ent, start, forward, 45, damage, kick, 0, MOD_PUNCH); 
 
 	ent->client->ps.gunframe++; //NEEDED
 	PlayerNoise(ent, start, PNOISE_WEAPON); //NEEDED
@@ -1519,7 +1519,7 @@ void Weapon_Null (edict_t *ent)
 	static int	pause_frames[ ] = { 10, 21, 0 };
 	static int	fire_frames[ ] = { 6, 0 }; // Frame stuff here
 
-	Weapon_Generic (ent, 3, 9, 22, 24, pause_frames, fire_frames, Null_Fire);
+	Weapon_Generic (ent, 3, 5, 22, 24, pause_frames, fire_frames, Null_Fire);
 }
 //BIGBOYGRAPPLE SOURCE CODE:https://github.com/yquake2/ctf/tree/master/src
 void CTFPlayerResetGrapple(edict_t *ent)
@@ -1859,7 +1859,7 @@ void CTFWeapon_Grapple(edict_t *ent)
 	}
 
 	prevstate = ent->client->weaponstate;
-	Weapon_Generic(ent, 5, 9, 31, 36, pause_frames, fire_frames,
+	Weapon_Generic(ent, 0, 9, 31, 36, pause_frames, fire_frames,
 		CTFWeapon_Grapple_Fire);
 
 	/* if we just switched back to grapple, immediately go to fire frame */

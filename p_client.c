@@ -1698,60 +1698,31 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 			VectorCopy (pm.viewangles, client->ps.viewangles);
 		}
 
-		//BIGBOY
-		//handle cloaking ability https://www.quakewiki.net/archives/qdevels/quake2/7_9_98d.html
+		//BIGBOYCLOAK inherited from https://www.quakewiki.net/archives/qdevels/quake2/7_9_98d.html
 		if (ent->client->cloakable)
 		{
-			//VectorCopy(pm.viewangles, client->v_angle);
-			//VectorCopy(pm.viewangles, client->ps.viewangles);
-
-			if (ucmd->forwardmove != 0 || ucmd->sidemove != 0) 			//if (ucmd->crouch != 0)
+			if (ent->client->cloaking)
 			{
-				ent->svflags &= ~SVF_NOCLIENT;
-				ent->client->cloaking = false;
-			}
-			else
-			{
-				if (ent->svflags & SVF_NOCLIENT)
+				
+				if (level.time > ent->client->cloakacttime) //when time it takes for cloak to enable is met (not instantly enabled)
 				{
-					if (ent->client->pers.inventory[ITEM_INDEX(FindItem("Cells"))] >= CLOAK_AMMO)
+					gi.centerprintf(ent, "Cloaked\n");
+					ent->flags |= FL_NOTARGET; //unseen by enemies
+					if (level.time >= ent->client->cloaktime) //when cloak time is met cloakable = false
 					{
-						ent->client->cloakdrain++;
-						if (ent->client->cloakdrain == CLOAK_DRAIN)
-						{
-							ent->client->pers.inventory[ITEM_INDEX(FindItem("Cells"))] -= CLOAK_AMMO;
-							ent->client->cloakdrain = 0;
-						}
-					}
-					else
-					{
-						ent->svflags &= ~SVF_NOCLIENT;
+						gi.centerprintf(ent, "Cloak Time Done\n");
+						ent->flags &= ~FL_NOTARGET; //seen by enemies
 						ent->client->cloaking = false;
-					}
-				}
-				else
-				{
-					if (ent->client->cloaking)
-					{
-						if (level.time > ent->client->cloaktime)
-						{
-							gi.centerprintf(ent, "Unseen\n");
-							//gi.sound(ent, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0);
-							ent->svflags |= SVF_NOCLIENT;
-							//ent->svflags = SVF_NOCLIENT;
-							ent->client->cloakdrain = 0;
-						}
-					}
-					else
-					{
-						ent->client->cloaktime = level.time + CLOAK_ACTIVATE_TIME;
-						ent->client->cloaking = true;
+						ent->client->cloakable = false;
+						ent->client->incloakcoold = true; //puts in cool down state in cmd_cloak_f
+						gi.linkentity(ent);
 					}
 				}
 			}
 		}
-
-		if (client->ctf_grapple) //BIGBOYGRAPPLE
+		
+		//BIGBOYGRAPPLE
+		if (client->ctf_grapple) 
 		{
 			CTFGrapplePull(client->ctf_grapple);
 		}

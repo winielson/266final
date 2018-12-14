@@ -1,8 +1,9 @@
-﻿Build started 12/13/2018 12:03:39 PM.
+﻿Build started 12/14/2018 6:21:47 PM.
      1>Project "C:\Program Files (x86)\Steam\steamapps\common\Quake 2\final\game.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Z7 /nologo /W1 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _WINDLL /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\release/" /Fd".\release/vc120.pdb" /Gd /TC /analyze- /errorReport:prompt p_weapon.c
-         p_weapon.c
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Z7 /nologo /W1 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _WINDLL /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\release/" /Fd".\release/vc120.pdb" /Gd /TC /analyze- /errorReport:prompt g_weapon.c
+         g_weapon.c
+     1>g_weapon.c(506): warning C4028: formal parameter 7 different from declaration
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1186,5): warning MSB8012: TargetPath(C:\Program Files (x86)\Steam\steamapps\common\Quake 2\final\..\baseq2\game.dll) does not match the Linker's OutputFile property value (C:\Program Files (x86)\Steam\steamapps\common\Quake 2\release\gamex86.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1188,5): warning MSB8012: TargetName(game) does not match the Linker's OutputFile property value (gamex86). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
        Link:
@@ -60,4 +61,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.46
+Time Elapsed 00:00:00.47

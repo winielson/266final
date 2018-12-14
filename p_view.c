@@ -420,9 +420,12 @@ void SV_CalcBlend (edict_t *ent)
 	else if (contents & CONTENTS_WATER)
 		SV_AddBlend (0.5, 0.3, 0.2, 0.4, ent->client->ps.blend);
 
-	// BIGBOY NEW CODE: cloaked - darken vision
-	if (ent->client->cloakable && (ent->svflags & SVF_NOCLIENT))
+	// BIGBOYCLOAK darken vision
+	if (ent->client->cloakable && (ent->flags & FL_NOTARGET))
+	{
 		SV_AddBlend(-1, -1, -1, 0.3, ent->client->ps.blend);
+	}
+		
 
 	// add for powerups
 	if (ent->client->quad_framenum > level.framenum)
@@ -928,6 +931,8 @@ newanim:
 	{	// running
 		if (duck)
 		{
+			//ent->s.frame = FRAME_run1;
+			//client->anim_end = FRAME_run6;
 			ent->s.frame = FRAME_crwalk1;
 			client->anim_end = FRAME_crwalk6;
 		}

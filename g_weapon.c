@@ -400,6 +400,8 @@ static void Grenade_Explode (edict_t *ent)
 			mod = MOD_HANDGRENADE;
 		else
 			mod = MOD_GRENADE;
+
+		//ent->enemy->mnaded = 1;
 		T_Damage (ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, mod);
 	}
 
@@ -1071,12 +1073,18 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 		// do the damage
 		T_Damage (tr.ent, self, self, vec3_origin, tr.ent->s.origin, vec3_origin, damage, kick / 2, DAMAGE_ENERGY, mod); // Time to Slice my friends
 		
-		gi.sound (self, CHAN_WEAPON, gi.soundindex("berserk/who.wav") , 1, ATTN_IDLE, 0); // Used for my Punch.
-		//gi.sound(self, CHAN_WEAPON, gi.soundindex("insane/insane7.wav"), 1, ATTN_IDLE, 0); // Used for my Punch.
+		//gi.sound (self, CHAN_WEAPON, gi.soundindex("berserk/who.wav") , 1, ATTN_IDLE, 0); // Used for my Punch.
+		if (self->client->cloaking)
+		{
+			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); // Don't change this. 
+			gi.centerprintf(self, "Sneak Attack x4 Damage\n");
+		}
+
+
+		gi.sound(self, CHAN_WEAPON, gi.soundindex("brain/melee3.wav"), 1, ATTN_IDLE, 0); // Used for my Punch.
 
 		if(!quiet)
-			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); // Don't change this. 
-			//gi.sound(self, CHAN_WEAPON, gi.soundindex("insane/insane7.wav"), 1, ATTN_NORM, 0); // Don't change this. 
+			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); 
 			
 		//This is only used if your weapon is not quiet.. Chainfist isn't quiet, knife is
 	}
@@ -1091,8 +1099,8 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 		gi.WritePosition (tr.endpos);
 		gi.WriteDir (point);
 		gi.multicast (tr.endpos, MULTICAST_PVS);
-		gi.sound (self, CHAN_AUTO, gi.soundindex("berserk/theme.wav"), 1, ATTN_NORM, 0); //batman theme when wall is hit
-		//gi.sound(self, CHAN_AUTO, gi.soundindex("insane/insane5.wav"), 1, ATTN_NORM, 0); //hit wall sound 
+		//gi.sound (self, CHAN_AUTO, gi.soundindex("berserk/theme.wav"), 1, ATTN_NORM, 0); //batman theme when wall is hit
+		gi.sound(self, CHAN_AUTO, gi.soundindex("berserk/riddle.wav"), 1, ATTN_NORM, 0); //hit wall sound 
 		//gi.soundindex("weapons/bfg__l1a.wav");//
 	}
 }

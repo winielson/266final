@@ -676,10 +676,12 @@ void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_
 #define DEFAULT_SHOTGUN_COUNT	12
 #define DEFAULT_SSHOTGUN_COUNT	20
 
-//BIGBOY flags
-#define CLOAK_ACTIVATE_TIME			.5		// cloak after 1.5 seconds
+//BIGBOYCLOAK
+#define CLOAK_ON_TIME				10		// cloak time limit 10 seconds
+#define CLOAK_COOLDOWN_TIME			20		// cloak cooldown 10 seconds
+#define CLOAK_ACTIVATE_TIME			.2		// cloak activate after .2 seconds
 #define CLOAK_DRAIN					2		// every CLOAK_DRAIN frames,
-#define CLOAK_AMMO					0		// drain CLOAK_AMMO amount of cells
+#define CLOAK_AMMO					5		// drain CLOAK_AMMO amount of cells
 
 //
 // g_monster.c
@@ -881,6 +883,7 @@ typedef struct
 	//BIGBOY
 	int			grabbing; 
 	qboolean	homing_state;	// are homing missiles activated
+	//qboolean	mnaded; //are monsters in radius of mnade
 
 } client_persistant_t;
 
@@ -989,10 +992,13 @@ struct gclient_s
 	vec3_t		hang_point;
 	float		flip_time;
 
-	//BIGBOY cloak
+	//BIGBOYCLOAK
 	qboolean	cloakable;
 	qboolean	cloaking;
-	float		cloaktime;
+	qboolean	incloakcoold; //cooldown flag
+	float		cloakacttime; //time it takes for cloaking to activate
+	float		cloaktime; //time able to cloaking
+	float		cloakcoold; //cloakcooldown time
 	int			cloakdrain;
 };
 
@@ -1144,5 +1150,8 @@ struct edict_s
 	// common data blocks
 	moveinfo_t		moveinfo;
 	monsterinfo_t	monsterinfo;
+
+	//BIGBOYMNADE
+	qboolean	mnaded; //are monsters in radius of mnade
 };
 

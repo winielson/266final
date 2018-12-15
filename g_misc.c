@@ -777,7 +777,8 @@ void func_explosive_explode (edict_t *self, edict_t *inflictor, edict_t *attacke
 	self->takedamage = DAMAGE_NO;
 
 	if (self->dmg)
-		T_RadiusDamage (self, attacker, self->dmg, NULL, self->dmg+40, MOD_EXPLOSIVE);
+		T_RadiusDamage(self, attacker, self->dmg, NULL, 300, MOD_EXPLOSIVE);
+		//T_RadiusDamage (self, attacker, self->dmg, NULL, self->dmg+40, MOD_EXPLOSIVE);
 
 	VectorSubtract (self->s.origin, inflictor->s.origin, self->velocity);
 	VectorNormalize (self->velocity);

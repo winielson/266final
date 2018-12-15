@@ -903,7 +903,7 @@ void Cmd_Cloak_f(edict_t *ent)
 	else if (ent->client->cloakable ^= 1) //toggles variable
 	{
 		//gi.centerprintf(ent, "Motion Cloaking Enabled!\n");
-		gi.sound(ent, CHAN_VOICE, gi.soundindex("berserk/amb.wav"), 1, ATTN_NORM, 0);
+		gi.sound(ent, CHAN_VOICE, gi.soundindex("player/u_breath2.wav"), 1, ATTN_NORM, 0);
 		ent->client->cloaktime = level.time + CLOAK_ON_TIME;
 		ent->client->cloakacttime = level.time + CLOAK_ACTIVATE_TIME;
 		ent->client->cloakcoold = level.time + CLOAK_COOLDOWN_TIME;

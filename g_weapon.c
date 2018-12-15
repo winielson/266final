@@ -370,13 +370,13 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 	}
 }	
 
-
 /*
 =================
 fire_grenade
 =================
 */
-static void Grenade_Explode (edict_t *ent)
+
+static void Grenade_Explode(edict_t *ent)
 {
 	vec3_t		origin;
 	int			mod;
@@ -391,18 +391,16 @@ static void Grenade_Explode (edict_t *ent)
 		vec3_t	v;
 		vec3_t	dir;
 
-		VectorAdd (ent->enemy->mins, ent->enemy->maxs, v);
-		VectorMA (ent->enemy->s.origin, 0.5, v, v);
-		VectorSubtract (ent->s.origin, v, v);
-		points = ent->dmg - 0.5 * VectorLength (v);
-		VectorSubtract (ent->enemy->s.origin, ent->s.origin, dir);
+		VectorAdd(ent->enemy->mins, ent->enemy->maxs, v);
+		VectorMA(ent->enemy->s.origin, 0.5, v, v);
+		VectorSubtract(ent->s.origin, v, v);
+		points = ent->dmg - 0.5 * VectorLength(v);
+		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
 		if (ent->spawnflags & 1)
 			mod = MOD_HANDGRENADE;
 		else
 			mod = MOD_GRENADE;
-
-		//ent->enemy->mnaded = 1;
-		T_Damage (ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, mod);
+		T_Damage(ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, mod);
 	}
 
 	if (ent->spawnflags & 2)
@@ -413,26 +411,26 @@ static void Grenade_Explode (edict_t *ent)
 		mod = MOD_G_SPLASH;
 	T_RadiusDamage(ent, ent->owner, ent->dmg, ent->enemy, ent->dmg_radius, mod);
 
-	VectorMA (ent->s.origin, -0.02, ent->velocity, origin);
-	gi.WriteByte (svc_temp_entity);
+	VectorMA(ent->s.origin, -0.02, ent->velocity, origin);
+	gi.WriteByte(svc_temp_entity);
 	if (ent->waterlevel)
 	{
 		if (ent->groundentity)
-			gi.WriteByte (TE_GRENADE_EXPLOSION_WATER);
+			gi.WriteByte(TE_GRENADE_EXPLOSION_WATER);
 		else
-			gi.WriteByte (TE_ROCKET_EXPLOSION_WATER);
+			gi.WriteByte(TE_ROCKET_EXPLOSION_WATER);
 	}
 	else
 	{
 		if (ent->groundentity)
-			gi.WriteByte (TE_GRENADE_EXPLOSION);
+			gi.WriteByte(TE_GRENADE_EXPLOSION);
 		else
-			gi.WriteByte (TE_ROCKET_EXPLOSION);
+			gi.WriteByte(TE_ROCKET_EXPLOSION);
 	}
-	gi.WritePosition (origin);
-	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	gi.WritePosition(origin);
+	gi.multicast(ent->s.origin, MULTICAST_PHS);
 
-	G_FreeEdict (ent);
+	G_FreeEdict(ent);
 }
 
 static void Grenade_Touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
@@ -463,45 +461,107 @@ static void Grenade_Touch (edict_t *ent, edict_t *other, cplane_t *plane, csurfa
 	}
 
 	ent->enemy = other;
-	Grenade_Explode (ent);
+	Grenade_Explode(ent);
 }
 
-/*
-void fire_grenade(edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius)
+//BIGBOYMNADE 
+static void MNade_Explode(edict_t *ent)
 {
-	edict_t	*grenade;
-	vec3_t	dir;
-	vec3_t	forward, right, up;
+	vec3_t		origin;
+	int			mod;
 
-	vectoangles (aimdir, dir);
-	AngleVectors (dir, forward, right, up);
+	if (ent->owner->client)
+		PlayerNoise(ent->owner, ent->s.origin, PNOISE_IMPACT);
 
-	grenade = G_Spawn();
-	VectorCopy (start, grenade->s.origin);
-	VectorScale (aimdir, speed, grenade->velocity);
-	VectorMA (grenade->velocity, 200 + crandom() * 10.0, up, grenade->velocity);
-	VectorMA (grenade->velocity, crandom() * 10.0, right, grenade->velocity);
-	VectorSet (grenade->avelocity, 300, 300, 300);
-	grenade->movetype = MOVETYPE_BOUNCE;
-	grenade->clipmask = MASK_SHOT;
-	grenade->solid = SOLID_BBOX;
-	grenade->s.effects |= EF_GRENADE;
-	VectorClear (grenade->mins);
-	VectorClear (grenade->maxs);
-	grenade->s.modelindex = gi.modelindex ("models/objects/grenade/tris.md2");
-	grenade->owner = self;
-	grenade->touch = Grenade_Touch;
-	grenade->nextthink = level.time + timer;
-	grenade->think = Grenade_Explode;
-	grenade->dmg = damage;
-	grenade->dmg_radius = damage_radius;
-	grenade->classname = "grenade";
+	//FIXME: if we are onground then raise our Z just a bit since we are a point?
+	if (ent->enemy)
+	{
+		float	points;
+		vec3_t	v;
+		vec3_t	dir;
 
-	gi.linkentity (grenade);
+		VectorAdd(ent->enemy->mins, ent->enemy->maxs, v);
+		VectorMA(ent->enemy->s.origin, 0.5, v, v);
+		VectorSubtract(ent->s.origin, v, v);
+		points = ent->dmg - 0.5 * VectorLength(v);
+		VectorSubtract(ent->enemy->s.origin, ent->s.origin, dir);
+		if (ent->spawnflags & 1)
+			mod = MOD_HANDGRENADE;
+		else
+			mod = MOD_GRENADE;
+
+		T_Damage(ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, mod);
+	}
+
+	if (ent->spawnflags & 2)
+		mod = MOD_HELD_GRENADE;
+	else if (ent->spawnflags & 1)
+		mod = MOD_HG_SPLASH;
+	else
+		mod = MOD_G_SPLASH;
+
+	ent->mnaded = true;
+	T_RadiusDamage(ent, ent->owner, ent->dmg, ent->enemy, ent->dmg_radius, mod);
+	//ent->enemy->mnaded ^= 1;
+	//gi.linkentity(ent->enemy);
+
+	VectorMA(ent->s.origin, -0.02, ent->velocity, origin);
+	gi.WriteByte(svc_temp_entity);
+	if (ent->waterlevel)
+	{
+		if (ent->groundentity)
+			gi.WriteByte(TE_GRENADE_EXPLOSION_WATER);
+		else
+			gi.WriteByte(TE_ROCKET_EXPLOSION_WATER);
+	}
+	else
+	{
+		if (ent->groundentity)
+			gi.WriteByte(TE_GRENADE_EXPLOSION);
+		else
+			gi.WriteByte(TE_ROCKET_EXPLOSION);
+	}
+	gi.WritePosition(origin);
+	gi.multicast(ent->s.origin, MULTICAST_PHS);
+
+	G_FreeEdict(ent);
 }
-*/
 
-//took rocket_fire for explosive brangs
+static void MNade_Touch(edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+{
+	if (other == ent->owner)
+		return;
+
+	if (surf && (surf->flags & SURF_SKY))
+	{
+		G_FreeEdict(ent);
+		return;
+	}
+
+	if (!other->takedamage)
+	{
+		if (ent->spawnflags & 1)
+		{
+			if (random() > 0.5)
+				gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/hgrenb1a.wav"), 1, ATTN_NORM, 0);
+			else
+				gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/hgrenb2a.wav"), 1, ATTN_NORM, 0);
+		}
+		else
+		{
+			gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/grenlb1b.wav"), 1, ATTN_NORM, 0);
+		}
+		return;
+	}
+
+	//when grenade hits enemy mnaded == true
+	other->mnaded ^= true;
+	FindTarget(other);
+	//other->enemy = other;
+	Grenade_Explode(ent);
+}
+
+//BIGBOYEBRANGS took rocket_fire for explosive brangs
 void fire_grenade(edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
 {
 	edict_t	*grenade;
@@ -563,9 +623,11 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 	VectorClear (grenade->maxs);
 	grenade->s.modelindex = gi.modelindex ("models/objects/grenade2/tris.md2");
 	grenade->owner = self;
-	grenade->touch = Grenade_Touch;
+	grenade->touch = MNade_Touch;
 	grenade->nextthink = level.time + timer;
-	grenade->think = Grenade_Explode;
+	grenade->think = MNade_Explode;
+	//grenade->dmg = 10;
+	//grenade->dmg_radius = 300;
 	grenade->dmg = damage;
 	grenade->dmg_radius = damage_radius;
 	grenade->classname = "hgrenade";
@@ -587,7 +649,7 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 
 /*
 =================
-fire_rocket
+fire_rocket BIGBOYHBRANGS
 =================
 */
 void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
@@ -1046,20 +1108,20 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 	vec3_t point;
 	trace_t tr;
 
-	//gi.soundindex("tank/thud.wav");
 	vectoangles(aim, v);
 	AngleVectors(v, forward, right, up);
 	VectorNormalize(forward);
 	VectorMA(start, reach, forward, point);
 
-	//gi.sound(self, CHAN_WEAPON, gi.soundindex("gladiator/melee3.wav"), 1, ATTN_IDLE, 0); //makes sound when punch
-
 	//see if hit connects
 	tr = gi.trace(start, NULL, NULL, point, self, MASK_SHOT);
+
 	if (tr.fraction == 1.0)
 	{
-		if (!quiet) //not needed, follow later steps
+		gi.sound(self, CHAN_WEAPON, gi.soundindex("gladiator/melee3.wav"), 1, ATTN_IDLE, 0); //makes sound when punch doesn't hit anything
 
+		if (!quiet) //not needed, it's better to follow my later steps
+			//gi.sound (self, CHAN_WEAPON, gi.soundindex ("weapons/swish.wav"), 1, ATTN_NORM, 0);
 		return;
 	}
 
@@ -1067,31 +1129,27 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 	{
 		// pull the player forward if you dodamage
 		VectorMA(self->velocity, 75, forward, self->velocity); // Pull forward
-//		VectorMA(self->velocity, 75, up, self->velocity); // Pull up a tad bit. You can't slide
 		VectorMA(self->velocity, 75, up, self->velocity); // Pull up a tad bit. You can't slide
 
 		// do the damage
 		T_Damage (tr.ent, self, self, vec3_origin, tr.ent->s.origin, vec3_origin, damage, kick / 2, DAMAGE_ENERGY, mod); // Time to Slice my friends
 		
-		//gi.sound (self, CHAN_WEAPON, gi.soundindex("berserk/who.wav") , 1, ATTN_IDLE, 0); // Used for my Punch.
 		if (self->client->cloaking)
 		{
-			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); // Don't change this. 
+			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); 
 			gi.centerprintf(self, "Sneak Attack x4 Damage\n");
 		}
 
 
-		gi.sound(self, CHAN_WEAPON, gi.soundindex("brain/melee3.wav"), 1, ATTN_IDLE, 0); // Used for my Punch.
+		gi.sound(self, CHAN_WEAPON, gi.soundindex("brain/melee3.wav"), 1, ATTN_IDLE, 0); //Sound when entity is hit
 
-		if(!quiet)
-			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); 
-			
-		//This is only used if your weapon is not quiet.. Chainfist isn't quiet, knife is
+		if(!quiet) //This is only used if your weapon is not quiet.. Chainfist isn't quiet, knife is
+			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0);	
 	}
 	else //something else is hit like wall
 	{
-		if (!quiet)
-			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0);
+		//if (!quiet) //This is only used if your weapon is not quiet.. Chainfist isn't quiet, knife is
+			//gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0);
 
 		VectorScale (tr.plane.normal, 256, point);
 		gi.WriteByte (svc_temp_entity);
@@ -1099,12 +1157,6 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 		gi.WritePosition (tr.endpos);
 		gi.WriteDir (point);
 		gi.multicast (tr.endpos, MULTICAST_PVS);
-		//gi.sound (self, CHAN_AUTO, gi.soundindex("berserk/theme.wav"), 1, ATTN_NORM, 0); //batman theme when wall is hit
 		gi.sound(self, CHAN_AUTO, gi.soundindex("berserk/riddle.wav"), 1, ATTN_NORM, 0); //hit wall sound 
-		//gi.soundindex("weapons/bfg__l1a.wav");//
 	}
 }
-
-//BIGBOYGRAPPLE
-
-

@@ -660,6 +660,9 @@ qboolean CanDamage (edict_t *targ, edict_t *inflictor);
 void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir, vec3_t point, vec3_t normal, int damage, int knockback, int dflags, int mod);
 void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_t *ignore, float radius, int mod);
 
+//BIGBOYMNADE
+//void T_Mnaded(edict_t *inflictor, edict_t *attacker, float damage, edict_t *ignore, float radius, int mod);
+
 // damage flags
 #define DAMAGE_RADIUS			0x00000001	// damage was indirect
 #define DAMAGE_NO_ARMOR			0x00000002	// armour does not protect from this damage
@@ -677,8 +680,10 @@ void T_RadiusDamage (edict_t *inflictor, edict_t *attacker, float damage, edict_
 #define DEFAULT_SSHOTGUN_COUNT	20
 
 //BIGBOYCLOAK
-#define CLOAK_ON_TIME				10		// cloak time limit 10 seconds
-#define CLOAK_COOLDOWN_TIME			20		// cloak cooldown 10 seconds
+//#define CLOAK_ON_TIME				10		// cloak time limit 10 seconds
+//#define CLOAK_COOLDOWN_TIME			20		// cloak cooldown 10 seconds
+#define CLOAK_ON_TIME				1000		// cloak time limit 10 seconds
+#define CLOAK_COOLDOWN_TIME			2000		// cloak cooldown 10 seconds
 #define CLOAK_ACTIVATE_TIME			.2		// cloak activate after .2 seconds
 #define CLOAK_DRAIN					2		// every CLOAK_DRAIN frames,
 #define CLOAK_AMMO					5		// drain CLOAK_AMMO amount of cells
@@ -883,8 +888,6 @@ typedef struct
 	//BIGBOY
 	int			grabbing; 
 	qboolean	homing_state;	// are homing missiles activated
-	//qboolean	mnaded; //are monsters in radius of mnade
-
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns
@@ -1000,6 +1003,9 @@ struct gclient_s
 	float		cloaktime; //time able to cloaking
 	float		cloakcoold; //cloakcooldown time
 	int			cloakdrain;
+
+	//BIGBOYMNADE
+	//qboolean	mnaded; //are monsters in radius of mnade
 };
 
 

@@ -1703,10 +1703,10 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		{
 			if (ent->client->cloaking)
 			{
-				
+				//gi.centerprintf(ent, "Cloaked\n");
 				if (level.time > ent->client->cloakacttime) //when time it takes for cloak to enable is met (not instantly enabled)
 				{
-					gi.centerprintf(ent, "Cloaked\n");
+					//gi.centerprintf(ent, "Cloaked\n"); //reprints cloaked the whole time
 					ent->flags |= FL_NOTARGET; //unseen by enemies
 					if (level.time >= ent->client->cloaktime) //when cloak time is met cloakable = false
 					{
@@ -1725,7 +1725,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		if (client->ctf_grapple) 
 		{
 			CTFGrapplePull(client->ctf_grapple);
-		}
+		}		
 
 		gi.linkentity (ent);
 

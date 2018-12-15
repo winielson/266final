@@ -403,27 +403,15 @@ qboolean FindTarget (edict_t *self)
 				return false;
 		}
 
-		return false;
-	}
-	/*
-	if (self->monsterinfo.aiflags & AI_GOOD_GUY)
-	{
-		if (self->goalentity && self->goalentity->inuse && self->goalentity->classname)
-		{
-			if (strcmp(self->goalentity->classname, "target_actor") == 0)
-				return false;
-		}
-
 		//FIXME look for monsters?
 		return false;
 	}
-	*/
-	//if (self->client->cloaking)
-		//return false;
+
+	//self->mnaded = true;
 
 	//Look for monsters! BIGBOYMNADE
-	if (self->mnaded)
-	{
+	//if (self->mnaded)
+	//{
 		monster = FindMonster(self);
 		if (monster)
 		{
@@ -431,7 +419,7 @@ qboolean FindTarget (edict_t *self)
 			FoundTarget(self);
 			return true;
 		}
-	}
+	//}
 
 	// if we're going to a combat point, just proceed
 	if (self->monsterinfo.aiflags & AI_COMBAT_POINT)
@@ -445,7 +433,7 @@ qboolean FindTarget (edict_t *self)
 // but not weapon impact/explosion noises
 
 	heardit = false;
-	if ((level.sight_entity_framenum >= (level.framenum - 1)) && !(self->spawnflags & 1) )
+	if ((level.sight_entity_framenum >= (level.framenum - 1)) && !(self->spawnflags & 1))
 	{
 		client = level.sight_entity;
 		if (client->enemy == self->enemy)
@@ -458,7 +446,7 @@ qboolean FindTarget (edict_t *self)
 		client = level.sound_entity;
 		heardit = true;
 	}
-	else if (!(self->enemy) && (level.sound2_entity_framenum >= (level.framenum - 1)) && !(self->spawnflags & 1) )
+	else if (!(self->enemy) && (level.sound2_entity_framenum >= (level.framenum - 1)) && !(self->spawnflags & 1))
 	{
 		client = level.sound2_entity;
 		heardit = true;
@@ -475,8 +463,7 @@ qboolean FindTarget (edict_t *self)
 		return false;
 
 	if (client == self->enemy)
-		return false;
-		//return true;	// JDC false;
+		return true;	// JDC false;
 
 	if (client->client)
 	{
@@ -500,38 +487,50 @@ qboolean FindTarget (edict_t *self)
 
 	if (!heardit)
 	{
-		r = range (self, client);
+		r = range(self, client);
 
 		if (r == RANGE_FAR)
 			return false;
 
-// this is where we would check invisibility
+		// this is where we would check invisibility
 
 		// is client in an spot too dark to be seen?
 		if (client->light_level <= 5)
 			return false;
 
-		if (!visible (self, client))
+		if (!visible(self, client))
 		{
 			return false;
 		}
 
 		if (r == RANGE_NEAR)
 		{
-			if (client->show_hostile < level.time && !infront (self, client))
+			if (client->show_hostile < level.time && !infront(self, client))
 			{
 				return false;
 			}
 		}
 		else if (r == RANGE_MID)
 		{
-			if (!infront (self, client))
+			if (!infront(self, client))
 			{
 				return false;
 			}
 		}
 
-		self->enemy = client;
+		
+		if (!(self->mnaded))
+			self->enemy = client;
+		else
+			self->enemy = self;
+		
+		if (client->client)
+		{
+			if (client->flags & FL_NOTARGET)
+				return false;
+		}
+
+		//self->enemy = client;
 
 		if (strcmp(self->enemy->classname, "player_noise") != 0)
 		{
@@ -542,8 +541,10 @@ qboolean FindTarget (edict_t *self)
 				self->enemy = self->enemy->enemy;
 				if (!self->enemy->client)
 				{
-					self->enemy = NULL;
-					return false;
+					//self->enemy = NULL;
+					//return false;
+					self->enemy = self;
+					return true;
 				}
 			}
 		}
@@ -552,9 +553,15 @@ qboolean FindTarget (edict_t *self)
 	{
 		vec3_t	temp;
 
+		if (client->client)
+		{
+			if (client->flags & FL_NOTARGET)
+				return false;
+		}
+
 		if (self->spawnflags & 1)
 		{
-			if (!visible (self, client))
+			if (!visible(self, client))
 				return false;
 		}
 		else
@@ -563,7 +570,7 @@ qboolean FindTarget (edict_t *self)
 				return false;
 		}
 
-		VectorSubtract (client->s.origin, self->s.origin, temp);
+		VectorSubtract(client->s.origin, self->s.origin, temp);
 
 		if (VectorLength(temp) > 1000)	// too far to hear
 		{
@@ -572,24 +579,24 @@ qboolean FindTarget (edict_t *self)
 
 		// check area portals - if they are different and not connected then we can't hear it
 		if (client->areanum != self->areanum)
-			if (!gi.AreasConnected(self->areanum, client->areanum))
-				return false;
+		if (!gi.AreasConnected(self->areanum, client->areanum))
+			return false;
 
 		self->ideal_yaw = vectoyaw(temp);
-		M_ChangeYaw (self);
+		M_ChangeYaw(self);
 
 		// hunt the sound for a bit; hopefully find the real player
 		self->monsterinfo.aiflags |= AI_SOUND_TARGET;
 		self->enemy = client;
 	}
 
-//
-// got one
-//
+	//
+	// got one
+	//
 	FoundTarget(self);
 
 	if (!(self->monsterinfo.aiflags & AI_SOUND_TARGET) && (self->monsterinfo.sight))
-		self->monsterinfo.sight (self, self->enemy);
+		self->monsterinfo.sight(self, self->enemy);
 
 	return true;
 }
@@ -600,7 +607,7 @@ edict_t *FindMonster(edict_t *self)
 	edict_t	*ent = NULL;
 	edict_t	*best = NULL;
 
-	while ((ent = findradius(ent, self->s.origin, 1024)) != NULL)
+	while (((ent = findradius(ent, self->s.origin, 1024)) != NULL) && self->mnaded)
 	{
 		if (ent == self)
 			continue;

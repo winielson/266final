@@ -215,6 +215,7 @@ void target_explosion_explode (edict_t *self)
 	gi.multicast (self->s.origin, MULTICAST_PHS);
 
 	T_RadiusDamage (self, self->activator, self->dmg, NULL, self->dmg+40, MOD_EXPLOSIVE);
+	//T_RadiusDamage(self, self->activator, self->dmg, NULL, 300, MOD_EXPLOSIVE);
 
 	save = self->delay;
 	self->delay = 0;

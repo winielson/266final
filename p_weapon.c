@@ -513,7 +513,6 @@ void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST,
 	}
 }
 
-
 /*
 ======================================================================
 
@@ -526,34 +525,34 @@ GRENADE
 #define GRENADE_MINSPEED	400
 #define GRENADE_MAXSPEED	800
 
-void weapon_grenade_fire (edict_t *ent, qboolean held)
+void weapon_grenade_fire(edict_t *ent, qboolean held)
 {
 	vec3_t	offset;
 	vec3_t	forward, right;
 	vec3_t	start;
-	int		damage = 0;
+	int		damage = 10; //if less then ~10 game crashes when deadbodies r hit
 	float	timer;
 	int		speed;
-	float	radius = 1000;
+	float	radius = 300;
 
-	//radius = damage+40;
+	//radius = damage + 40;
 	if (is_quad)
 		damage *= 4;
 
-	VectorSet(offset, 8, 8, ent->viewheight-8);
-	AngleVectors (ent->client->v_angle, forward, right, NULL);
-	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
+	VectorSet(offset, 8, 8, ent->viewheight - 8);
+	AngleVectors(ent->client->v_angle, forward, right, NULL);
+	P_ProjectSource(ent->client, ent->s.origin, offset, forward, right, start);
 
 	timer = ent->client->grenade_time - level.time;
 	speed = GRENADE_MINSPEED + (GRENADE_TIMER - timer) * ((GRENADE_MAXSPEED - GRENADE_MINSPEED) / GRENADE_TIMER);
-	fire_grenade2 (ent, start, forward, damage, speed, timer, radius, held);
+	fire_grenade2(ent, start, forward, damage, speed, timer, radius, held);
 
-	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
+	if (!((int)dmflags->value & DF_INFINITE_AMMO))
 		ent->client->pers.inventory[ent->client->ammo_index]--;
 
 	ent->client->grenade_time = level.time + 1.0;
 
-	if(ent->deadflag || ent->s.modelindex != 255) // VWep animations screw up corpses
+	if (ent->deadflag || ent->s.modelindex != 255) // VWep animations screw up corpses
 	{
 		return;
 	}
@@ -564,7 +563,7 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
 	{
 		ent->client->anim_priority = ANIM_ATTACK;
-		ent->s.frame = FRAME_crattak1-1;
+		ent->s.frame = FRAME_crattak1 - 1;
 		ent->client->anim_end = FRAME_crattak3;
 	}
 	else
@@ -575,11 +574,11 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	}
 }
 
-void Weapon_Grenade (edict_t *ent)
+void Weapon_Grenade(edict_t *ent)
 {
 	if ((ent->client->newweapon) && (ent->client->weaponstate == WEAPON_READY))
 	{
-		ChangeWeapon (ent);
+		ChangeWeapon(ent);
 		return;
 	}
 
@@ -592,7 +591,7 @@ void Weapon_Grenade (edict_t *ent)
 
 	if (ent->client->weaponstate == WEAPON_READY)
 	{
-		if ( ((ent->client->latched_buttons|ent->client->buttons) & BUTTON_ATTACK) )
+		if (((ent->client->latched_buttons | ent->client->buttons) & BUTTON_ATTACK))
 		{
 			ent->client->latched_buttons &= ~BUTTON_ATTACK;
 			if (ent->client->pers.inventory[ent->client->ammo_index])
@@ -608,14 +607,14 @@ void Weapon_Grenade (edict_t *ent)
 					gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/noammo.wav"), 1, ATTN_NORM, 0);
 					ent->pain_debounce_time = level.time + 1;
 				}
-				NoAmmoWeaponChange (ent);
+				NoAmmoWeaponChange(ent);
 			}
 			return;
 		}
 
 		if ((ent->client->ps.gunframe == 29) || (ent->client->ps.gunframe == 34) || (ent->client->ps.gunframe == 39) || (ent->client->ps.gunframe == 48))
 		{
-			if (rand()&15)
+			if (rand() & 15)
 				return;
 		}
 
@@ -641,7 +640,7 @@ void Weapon_Grenade (edict_t *ent)
 			if (!ent->client->grenade_blew_up && level.time >= ent->client->grenade_time)
 			{
 				ent->client->weapon_sound = 0;
-				weapon_grenade_fire (ent, true);
+				weapon_grenade_fire(ent, true);
 				ent->client->grenade_blew_up = true;
 			}
 
@@ -665,7 +664,7 @@ void Weapon_Grenade (edict_t *ent)
 		if (ent->client->ps.gunframe == 12)
 		{
 			ent->client->weapon_sound = 0;
-			weapon_grenade_fire (ent, false);
+			weapon_grenade_fire(ent, false);
 		}
 
 		if ((ent->client->ps.gunframe == 15) && (level.time < ent->client->grenade_time))
@@ -684,53 +683,13 @@ void Weapon_Grenade (edict_t *ent)
 /*
 ======================================================================
 
-GRENADE LAUNCHER
+GRENADE LAUNCHER == BIGBOYEBRANG
 
 ======================================================================
 */
 
 void weapon_grenadelauncher_fire (edict_t *ent)
 {
-	/*
-	vec3_t	offset, start;
-	vec3_t	forward, right;
-	int		damage;
-	float	damage_radius;
-	int		radius_damage;
-
-	damage = 100 + (int)(random() * 20.0);
-	radius_damage = 120;
-	damage_radius = 300;
-	//damage_radius = 120;
-	if (is_quad)
-	{
-		damage *= 4;
-		radius_damage *= 4;
-	}
-
-	AngleVectors(ent->client->v_angle, forward, right, NULL);
-
-	VectorScale(forward, -2, ent->client->kick_origin);
-	ent->client->kick_angles[0] = -1;
-
-	VectorSet(offset, 8, 8, ent->viewheight - 8);
-	P_ProjectSource(ent->client, ent->s.origin, offset, forward, right, start);
-	fire_rocket(ent, start, forward, damage, 650, damage_radius, radius_damage);
-
-	// send muzzle flash
-	gi.WriteByte(svc_muzzleflash);
-	gi.WriteShort(ent - g_edicts);
-	gi.WriteByte(MZ_SILENCED | is_silenced);
-	//	gi.WriteByte (MZ_ROCKET | is_silenced);
-	gi.multicast(ent->s.origin, MULTICAST_PVS);
-
-	ent->client->ps.gunframe++;
-
-	PlayerNoise(ent, start, PNOISE_WEAPON);
-
-	if (!((int)dmflags->value & DF_INFINITE_AMMO))
-		ent->client->pers.inventory[ent->client->ammo_index]--;
-	*/
 	vec3_t	offset;
 	vec3_t	forward, right;
 	vec3_t	start;

@@ -1720,6 +1720,19 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 				}
 			}
 		}
+
+		//BIGBOYCROUCH when crouched, player is hidden
+		if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
+		{
+			ent->client->crouch ^= 1;
+			ent->flags |= FL_NOTARGET;
+		}
+		else if (!(ent->client->ps.pmove.pm_flags & PMF_DUCKED) && !(ent->client->cloaking))
+		{
+			ent->client->crouch ^= 0;
+			ent->flags &= ~FL_NOTARGET;
+		}
+
 		
 		//BIGBOYGRAPPLE
 		if (client->ctf_grapple) 

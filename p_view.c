@@ -425,6 +425,12 @@ void SV_CalcBlend (edict_t *ent)
 	{
 		SV_AddBlend(-1, -1, -1, 0.3, ent->client->ps.blend);
 	}
+
+	// BIGBOYCROUCH darken vision
+	if ((ent->client->ps.pmove.pm_flags & PMF_DUCKED) && (ent->flags & FL_NOTARGET))
+	{
+		SV_AddBlend(-1, -1, -1, 0.3, ent->client->ps.blend);
+	}
 		
 
 	// add for powerups

@@ -1457,6 +1457,12 @@ void Null_Fire(edict_t *ent)
 		kick *= 4;
 	}
 
+	if (ent->client->crouch)
+	{
+		damage *= 2;
+		kick *= 2;
+	}
+
 	// get start / end positions
 	VectorAdd (ent->client->v_angle, ent->client->kick_angles, angles);
 	AngleVectors (angles, forward, right, NULL);
@@ -1478,7 +1484,7 @@ void Weapon_Null (edict_t *ent)
 	static int	pause_frames[ ] = { 10, 21, 0 };
 	static int	fire_frames[ ] = { 6, 0 }; // Frame stuff here
 
-	Weapon_Generic (ent, 3, 5, 22, 24, pause_frames, fire_frames, Null_Fire);
+	Weapon_Generic (ent, 3, 6, 22, 24, pause_frames, fire_frames, Null_Fire);
 }
 //BIGBOYGRAPPLE SOURCE CODE:https://github.com/yquake2/ctf/tree/master/src
 void CTFPlayerResetGrapple(edict_t *ent)

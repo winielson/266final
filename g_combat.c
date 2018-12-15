@@ -399,9 +399,14 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 
 	VectorNormalize(dir);
 
+	/*
 // bonus damage for suprising a monster
 	if (!(dflags & DAMAGE_RADIUS) && (targ->svflags & SVF_MONSTER) && (attacker->client) && (!targ->enemy) && (targ->health > 0))
+	{
+		gi.centerprintf(attacker, "Sneak Attack x2 Damage\n");
 		damage *= 2;
+	}*/
+		
 
 	if (targ->flags & FL_NO_KNOCKBACK)
 		knockback = 0;

@@ -1136,9 +1136,16 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 		
 		if (self->client->cloaking)
 		{
-			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); 
-			gi.centerprintf(self, "Sneak Attack x4 Damage\n");
+			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); //Tell them who you are when sneak attacking
+			gi.centerprintf(self, "Cloaked Attack x4 Damage\n");
 		}
+
+		if (self->client->crouch)
+		{
+			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); //Tell them who you are when sneak attacking
+			gi.centerprintf(self, "Sneak Attack x2 Damage\n");
+		}
+		
 
 
 		gi.sound(self, CHAN_WEAPON, gi.soundindex("brain/melee3.wav"), 1, ATTN_IDLE, 0); //Sound when entity is hit

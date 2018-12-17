@@ -288,6 +288,7 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 	}
 
 	item = FindItem("Grenades");
+	//item = FindItem("Monster Grenades");
 	if (item)
 	{
 		index = ITEM_INDEX(item);
@@ -498,7 +499,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 	*/
 	if (weapon && !oldcount)
 	{
-		if (other->client->pers.weapon != ent->item && (!deathmatch->value || other->client->pers.weapon == FindItem("Hands")))
+		if (other->client->pers.weapon != ent->item && (!deathmatch->value || other->client->pers.weapon == FindItem("Your Fists")))
 			other->client->newweapon = ent->item;
 	}
 
@@ -1142,7 +1143,7 @@ gitem_t	itemlist[] =
 */
 	{
 		"item_armor_body", 
-		Pickup_Armor,
+		Pickup_Armor, //
 		NULL,
 		NULL,
 		NULL,
@@ -1150,7 +1151,7 @@ gitem_t	itemlist[] =
 		"models/items/armor/body/tris.md2", EF_ROTATE,
 		NULL,
 /* icon */		"i_bodyarmor",
-/* pickup */	"Body Armor",
+/* pickup */	"Bat Armor",//"Body Armor",
 /* width */		3,
 		0,
 		NULL,
@@ -1165,7 +1166,7 @@ gitem_t	itemlist[] =
 */
 	{
 		"item_armor_combat", 
-		Pickup_Armor,
+		NULL, //Pickup_Armor,
 		NULL,
 		NULL,
 		NULL,
@@ -1188,7 +1189,7 @@ gitem_t	itemlist[] =
 */
 	{
 		"item_armor_jacket", 
-		Pickup_Armor,
+		NULL, //Pickup_Armor,
 		NULL,
 		NULL,
 		NULL,
@@ -1211,7 +1212,7 @@ gitem_t	itemlist[] =
 */
 	{
 		"item_armor_shard", 
-		Pickup_Armor,
+		NULL, //Pickup_Armor,
 		NULL,
 		NULL,
 		NULL,
@@ -1235,7 +1236,7 @@ gitem_t	itemlist[] =
 */
 	{
 		"item_power_screen", 
-		Pickup_PowerArmor,
+		NULL, //Pickup_PowerArmor,
 		Use_PowerArmor,
 		Drop_PowerArmor,
 		NULL,
@@ -1258,7 +1259,7 @@ gitem_t	itemlist[] =
 */
 	{
 		"item_power_shield",
-		Pickup_PowerArmor,
+		NULL, //Pickup_PowerArmor,
 		Use_PowerArmor,
 		Drop_PowerArmor,
 		NULL,
@@ -1298,7 +1299,7 @@ gitem_t	itemlist[] =
 		EF_ROTATE, //Flags 0,
 		"models/weapons/grapple/tris.md2",
 		"w_grap", //w_grapple is invalid file name for some reason
-		"Grapple",
+		"Grappling Hook",//"Grapple",
 		0,
 		0,
 		NULL,
@@ -1323,7 +1324,7 @@ gitem_t	itemlist[] =
 		"", 0,
 		"",
 		"w_blaster",             //Icon to be used. you could create another, you probably should
-		"Hands",             //Pickup name. use this to give the item to someone at the start of the game
+		"Your Fists",             //Pickup name. use this to give the item to someone at the start of the game
 		0,
 		0,
 		NULL,
@@ -1464,7 +1465,7 @@ always owned, never in the world
 		"models/items/ammo/grenades/medium/tris.md2", 0,
 		"models/weapons/v_handgr/tris.md2",
 /* icon */		"a_grenades",
-/* pickup */	"Grenades",
+/* pickup */	"Grenades",//"Monster Grenades",
 /* width */		3,
 		5,
 		"grenades",
@@ -2262,7 +2263,8 @@ void SetItemNames (void)
 
 	jacket_armor_index = ITEM_INDEX(FindItem("Jacket Armor"));
 	combat_armor_index = ITEM_INDEX(FindItem("Combat Armor"));
-	body_armor_index   = ITEM_INDEX(FindItem("Body Armor"));
+	//body_armor_index   = ITEM_INDEX(FindItem("Body Armor"));
+	body_armor_index = ITEM_INDEX(FindItem("Bat Armor")); //BIGBOYARMOR
 	power_screen_index = ITEM_INDEX(FindItem("Power Screen"));
 	power_shield_index = ITEM_INDEX(FindItem("Power Shield"));
 }

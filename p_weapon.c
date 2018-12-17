@@ -252,7 +252,7 @@ void NoAmmoWeaponChange (edict_t *ent)
 	}
 	//BIGBOY
 	//ent->client->newweapon = FindItem ("blaster");
-	ent->client->newweapon = FindItem("Hands");
+	ent->client->newweapon = FindItem("Your Fists");
 }
 
 /*

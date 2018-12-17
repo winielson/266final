@@ -188,6 +188,7 @@ void InitGame (void)
 	InitItems ();
 
 	Com_sprintf (game.helpmessage1, sizeof(game.helpmessage1), "");
+	//Com_sprintf(game.helpmessage1, sizeof(game.helpmessage1), "Find out why he said Martha.");
 
 	Com_sprintf (game.helpmessage2, sizeof(game.helpmessage2), "");
 

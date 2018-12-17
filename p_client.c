@@ -413,7 +413,7 @@ void TossClientWeapon (edict_t *self)
 	item = self->client->pers.weapon;
 	if (!self->client->pers.inventory[self->client->ammo_index])
 		item = NULL;
-	if (item && (strcmp(item->pickup_name, "Hands") == 0)) //recentch
+	if (item && (strcmp(item->pickup_name, "Your Fists") == 0)) //recentch
 		item = NULL;
 	//if (item && (strcmp(item->pickup_name, "Grapple") == 0))
 		//item = NULL;
@@ -618,7 +618,7 @@ void InitClientPersistant (gclient_t *client)
 
 	//gi.soundindex("berserk/theme.wav"); //batman theme at start
 
-	item = FindItem("Hands"); //Start weapon == hands
+	item = FindItem("Your Fists"); //Start weapon == hands
 	//item = FindItem("Grapple");
 	
 	client->pers.selected_item = ITEM_INDEX(item);
@@ -630,9 +630,9 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.max_health		= 100;
 
 	client->pers.max_bullets	= 200;
-	client->pers.max_shells		= 100;
+	client->pers.max_shells		= 25; //ebrangs
 	client->pers.max_rockets	= 50; //hbrangs
-	client->pers.max_grenades	= 25; //ebrangs
+	client->pers.max_grenades	= 25; //mnades
 	client->pers.max_cells		= 200;
 	client->pers.max_slugs		= 50;
 

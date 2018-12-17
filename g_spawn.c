@@ -796,8 +796,20 @@ void SP_worldspawn (edict_t *ent)
 
 	if (ent->message && ent->message[0])
 	{
-		gi.configstring (CS_NAME, ent->message);
-		strncpy (level.level_name, ent->message, sizeof(level.level_name));
+		//BIGBOYUI
+		char *ck[512];
+		ent->message2 = " (Not the Bat Cave)\n";
+		
+		//ent->message2 = ent->message + "(Not the Bat Cave)";
+		//gi.configstring (CS_NAME, ent->message);
+		gi.configstring(CS_NAME, ent->message);
+		
+		strncpy(ck, ent->message,  sizeof(ck));
+		strncat(ck, ent->message2, sizeof(ck));
+
+		strncpy(level.level_name, ck, sizeof(level.level_name));
+		//gi.configstring (CS_NAME, ent->message);
+		//strncpy(level.level_name, ent->message, sizeof(level.level_name));
 	}
 	else
 		strncpy (level.level_name, level.mapname, sizeof(level.level_name));
@@ -838,9 +850,9 @@ void SP_worldspawn (edict_t *ent)
 
 	snd_fry = gi.soundindex ("player/fry.wav");	// standing in lava / slime
 
-	//BIGBOY
+	//BIGBOYHANDS
 	//PrecacheItem (FindItem ("Blaster"));
-	PrecacheItem(FindItem("Hands"));
+	PrecacheItem(FindItem("Your Fists"));
 
 	gi.soundindex ("player/lava1.wav");
 	gi.soundindex ("player/lava2.wav");

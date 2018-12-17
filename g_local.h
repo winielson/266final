@@ -1052,6 +1052,7 @@ struct edict_s
 	// only used locally in game, not by server
 	//
 	char		*message;
+	char		*message2;
 	char		*classname;
 	int			spawnflags;
 

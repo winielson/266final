@@ -98,10 +98,13 @@ void SP_target_speaker (edict_t *ent)
 
 void Use_Target_Help (edict_t *ent, edict_t *other, edict_t *activator)
 {
+	//BIGBOYUI
+	ent->message = "Find out why he said\n Martha."; //primary obj
+	ent->message2 = "Fight stuff."; //secondary obj
 	if (ent->spawnflags & 1)
 		strncpy (game.helpmessage1, ent->message, sizeof(game.helpmessage2)-1);
 	else
-		strncpy (game.helpmessage2, ent->message, sizeof(game.helpmessage1)-1);
+		strncpy (game.helpmessage2, ent->message2, sizeof(game.helpmessage1)-1);
 
 	game.helpchanged++;
 }

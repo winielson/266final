@@ -285,14 +285,16 @@ void HelpComputer (edict_t *ent)
 	char	string[1024];
 	char	*sk;
 
+	//BIGBOY UI
 	if (skill->value == 0)
-		sk = "easy";
+		sk = "Adam West"; 
 	else if (skill->value == 1)
-		sk = "medium";
+		sk = "Christian Bale";
 	else if (skill->value == 2)
-		sk = "hard";
+		sk = "No Parents";
 	else
-		sk = "hard+";
+		sk = "No Parents";
+		//sk = "hard+";
 
 	// send the layout
 	Com_sprintf (string, sizeof(string),

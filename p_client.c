@@ -631,8 +631,8 @@ void InitClientPersistant (gclient_t *client)
 
 	client->pers.max_bullets	= 200;
 	client->pers.max_shells		= 100;
-	client->pers.max_rockets	= 50;
-	client->pers.max_grenades	= 50;
+	client->pers.max_rockets	= 50; //hbrangs
+	client->pers.max_grenades	= 25; //ebrangs
 	client->pers.max_cells		= 200;
 	client->pers.max_slugs		= 50;
 
@@ -1726,6 +1726,10 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		{
 			ent->client->crouch ^= 1;
 			ent->flags |= FL_NOTARGET;
+		}
+		else if ((ent->client->ps.pmove.pm_flags & PMF_DUCKED) && !(ent->client->cloaking))
+		{
+			ent->client->crouch ^= 0;
 		}
 		else if (!(ent->client->ps.pmove.pm_flags & PMF_DUCKED) && !(ent->client->cloaking))
 		{

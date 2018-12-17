@@ -498,7 +498,8 @@ void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST,
 			if (ent->client->ps.gunframe == fire_frames[n])
 			{
 				if (ent->client->quad_framenum > level.framenum)
-					gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage3.wav"), 1, ATTN_NORM, 0);
+					gi.sound(ent, CHAN_ITEM, gi.soundindex("insane/insane11.wav"), 1, ATTN_NORM, 0); //BIGBOYOVER
+					//gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage3.wav"), 1, ATTN_NORM, 0);
 
 				fire (ent);
 				break;
@@ -1456,11 +1457,20 @@ void Null_Fire(edict_t *ent)
 		damage *= 4;
 		kick *= 4;
 	}
-
-	if (ent->client->crouch)
+	else if (ent->client->cloaking && (ent->flags == FL_NOTARGET))
+	{
+		damage *= 4;
+		kick *= 4;
+	}
+	else if (ent->client->crouch && (ent->flags == FL_NOTARGET))
 	{
 		damage *= 2;
 		kick *= 2;
+	}
+	else
+	{
+		damage *= 1;
+		kick *= 1;
 	}
 
 	// get start / end positions

@@ -326,6 +326,8 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 {
 	int		timeout;
 
+	gi.centerprintf(ent, "OVERLOADED\n"); //BIGBOYOVER
+
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
 	ValidateSelectedItem (ent);
 
@@ -344,7 +346,8 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 	else
 		ent->client->quad_framenum = level.framenum + timeout;
 
-	gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage.wav"), 1, ATTN_NORM, 0);
+	//gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage.wav"), 1, ATTN_NORM, 0);
+	gi.sound(ent, CHAN_ITEM, gi.soundindex("insane/insane5.wav"), 1, ATTN_NORM, 0); //BIGBOYOVER
 }
 
 //======================================================================
@@ -1360,9 +1363,9 @@ always owned, never in the world
 */
 	{
 		"weapon_shotgun", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		NULL,//Pickup_Weapon,
+		NULL,//Use_Weapon,
+		NULL, //Drop_Weapon,
 		Weapon_Shotgun,
 		"misc/w_pkup.wav",
 		"models/weapons/g_shotg/tris.md2", EF_ROTATE,
@@ -1371,7 +1374,7 @@ always owned, never in the world
 /* pickup */	"Shotgun",
 		0,
 		1,
-		"Shells",
+		NULL, //"Shells",
 		IT_WEAPON|IT_STAY_COOP,
 		//WEAP_SHOTGUN,
 		NULL,
@@ -1384,9 +1387,9 @@ always owned, never in the world
 */
 	{
 		"weapon_supershotgun", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		NULL, //Pickup_Weapon,
+		NULL, //Use_Weapon,
+		NULL, //Drop_Weapon,
 		Weapon_SuperShotgun,
 		"misc/w_pkup.wav",
 		"models/weapons/g_shotg2/tris.md2", EF_ROTATE,
@@ -1395,7 +1398,7 @@ always owned, never in the world
 /* pickup */	"Super Shotgun",
 		0,
 		2,
-		"Shells",
+		NULL, //"Shells",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_SUPERSHOTGUN,
 		NULL,
@@ -1407,9 +1410,9 @@ always owned, never in the world
 */
 	{
 		"weapon_machinegun", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		NULL, //Pickup_Weapon,
+		NULL,// Use_Weapon,
+		NULL, //Drop_Weapon,
 		Weapon_Machinegun,
 		"misc/w_pkup.wav",
 		"models/weapons/g_machn/tris.md2", EF_ROTATE,
@@ -1418,7 +1421,7 @@ always owned, never in the world
 /* pickup */	"Machinegun",
 		0,
 		1,
-		"Bullets",
+		NULL, //"Bullets",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_MACHINEGUN,
 		NULL,
@@ -1430,9 +1433,9 @@ always owned, never in the world
 */
 	{
 		"weapon_chaingun", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		NULL, //Pickup_Weapon,
+		NULL, //Use_Weapon,
+		NULL, //Drop_Weapon,
 		Weapon_Chaingun,
 		"misc/w_pkup.wav",
 		"models/weapons/g_chain/tris.md2", EF_ROTATE,
@@ -1441,7 +1444,7 @@ always owned, never in the world
 /* pickup */	"Chaingun",
 		0,
 		1,
-		"Bullets",
+		NULL, //"Bullets",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_CHAINGUN,
 		NULL,
@@ -1487,7 +1490,7 @@ always owned, never in the world
 /* pickup */	"Explosive BRangs",
 		0,
 		1,
-		"Grenades",
+		"Shells", //"Grenades",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_GRENADELAUNCHER,
 		NULL,
@@ -1523,9 +1526,9 @@ always owned, never in the world
 */
 	{
 		"weapon_hyperblaster", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		NULL, //Pickup_Weapon,
+		NULL, //Use_Weapon,
+		NULL, //Drop_Weapon,
 		Weapon_HyperBlaster,
 		"misc/w_pkup.wav",
 		"models/weapons/g_hyperb/tris.md2", EF_ROTATE,
@@ -1534,7 +1537,7 @@ always owned, never in the world
 /* pickup */	"HyperBlaster",
 		0,
 		1,
-		"Cells",
+		NULL, //"Cells",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_HYPERBLASTER,
 		NULL,
@@ -1546,9 +1549,9 @@ always owned, never in the world
 */
 	{
 		"weapon_railgun", 
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		NULL, //Pickup_Weapon,
+		NULL,// Use_Weapon,
+		NULL,// Drop_Weapon,
 		Weapon_Railgun,
 		"misc/w_pkup.wav",
 		"models/weapons/g_rail/tris.md2", EF_ROTATE,
@@ -1557,7 +1560,7 @@ always owned, never in the world
 /* pickup */	"Railgun",
 		0,
 		1,
-		"Slugs",
+		NULL, //"Slugs",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_RAILGUN,
 		NULL,
@@ -1569,9 +1572,9 @@ always owned, never in the world
 */
 	{
 		"weapon_bfg",
-		Pickup_Weapon,
-		Use_Weapon,
-		Drop_Weapon,
+		NULL, //Pickup_Weapon,
+		NULL, //Use_Weapon,
+		NULL,// Drop_Weapon,
 		Weapon_BFG,
 		"misc/w_pkup.wav",
 		"models/weapons/g_bfg/tris.md2", EF_ROTATE,
@@ -1580,7 +1583,7 @@ always owned, never in the world
 /* pickup */	"BFG10K",
 		0,
 		50,
-		"Cells",
+		NULL, //"Cells",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_BFG,
 		NULL,
@@ -1619,7 +1622,7 @@ always owned, never in the world
 */
 	{
 		"ammo_bullets",
-		Pickup_Ammo,
+		NULL, //Pickup_Ammo,
 		NULL,
 		Drop_Ammo,
 		NULL,
@@ -1723,7 +1726,7 @@ always owned, never in the world
 		"models/items/quaddama/tris.md2", EF_ROTATE,
 		NULL,
 /* icon */		"p_quad",
-/* pickup */	"Quad Damage",
+/* pickup */	"Overload", 
 /* width */		2,
 		60,
 		NULL,
@@ -1738,7 +1741,7 @@ always owned, never in the world
 */
 	{
 		"item_invulnerability",
-		Pickup_Powerup,
+		NULL, //Pickup_Powerup,
 		Use_Invulnerability,
 		Drop_General,
 		NULL,
@@ -1746,7 +1749,7 @@ always owned, never in the world
 		"models/items/invulner/tris.md2", EF_ROTATE,
 		NULL,
 /* icon */		"p_invulnerability",
-/* pickup */	"Invulnerability",
+/* pickup */	"INvulnerafshsdldfg",
 /* width */		2,
 		300,
 		NULL,
@@ -1761,7 +1764,7 @@ always owned, never in the world
 */
 	{
 		"item_silencer",
-		Pickup_Powerup,
+		NULL, //Pickup_Powerup,
 		Use_Silencer,
 		Drop_General,
 		NULL,
@@ -1807,7 +1810,7 @@ always owned, never in the world
 */
 	{
 		"item_enviro",
-		Pickup_Powerup,
+		NULL, //Pickup_Powerup,
 		Use_Envirosuit,
 		Drop_General,
 		NULL,
@@ -1831,7 +1834,7 @@ Special item that gives +2 to maximum health
 */
 	{
 		"item_ancient_head",
-		Pickup_AncientHead,
+		NULL, //Pickup_AncientHead,
 		NULL,
 		NULL,
 		NULL,
@@ -1855,7 +1858,7 @@ gives +1 to maximum health
 */
 	{
 		"item_adrenaline",
-		Pickup_Adrenaline,
+		NULL, //Pickup_Adrenaline,
 		NULL,
 		NULL,
 		NULL,
@@ -1878,7 +1881,7 @@ gives +1 to maximum health
 */
 	{
 		"item_bandolier",
-		Pickup_Bandolier,
+		NULL, //Pickup_Bandolier,
 		NULL,
 		NULL,
 		NULL,
@@ -1901,7 +1904,7 @@ gives +1 to maximum health
 */
 	{
 		"item_pack",
-		Pickup_Pack,
+		NULL, //Pickup_Pack,
 		NULL,
 		NULL,
 		NULL,

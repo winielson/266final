@@ -893,6 +893,7 @@ void Cmd_Cloak_f(edict_t *ent)
 		gi.centerprintf(ent, "Cooling Down!\n Can't cloak!\n");
 		ent->flags &= ~FL_NOTARGET;
 		ent->client->cloakable = false;
+		ent->client->cloaking = false;
 		if (level.time >= ent->client->cloakcoold)
 		{
 			gi.centerprintf(ent, "Cooldown done\n");

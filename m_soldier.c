@@ -482,20 +482,24 @@ void soldier_fire (edict_t *self, int flash_number)
 		VectorNormalize (aim);
 	}
 
+	//BIGBOYMONS
 	if (self->s.skinnum <= 1)
 	{
-		monster_fire_blaster (self, start, aim, 5, 600, flash_index, EF_BLASTER);
+		//monster_fire_blaster (self, start, aim, 5, 600, flash_index, EF_BLASTER);
+		monster_fire_blaster(self, start, aim, 10, 600, flash_index, EF_BLASTER);
 	}
 	else if (self->s.skinnum <= 3)
 	{
-		monster_fire_shotgun (self, start, aim, 2, 1, DEFAULT_SHOTGUN_HSPREAD, DEFAULT_SHOTGUN_VSPREAD, DEFAULT_SHOTGUN_COUNT, flash_index);
+		//monster_fire_shotgun (self, start, aim, 2, 1, DEFAULT_SHOTGUN_HSPREAD, DEFAULT_SHOTGUN_VSPREAD, DEFAULT_SHOTGUN_COUNT, flash_index);
+		monster_fire_shotgun(self, start, aim, 4, 1, DEFAULT_SHOTGUN_HSPREAD, DEFAULT_SHOTGUN_VSPREAD, DEFAULT_SHOTGUN_COUNT, flash_index);
 	}
 	else
 	{
 		if (!(self->monsterinfo.aiflags & AI_HOLD_FRAME))
 			self->monsterinfo.pausetime = level.time + (3 + rand() % 8) * FRAMETIME;
 
-		monster_fire_bullet (self, start, aim, 2, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, flash_index);
+		//monster_fire_bullet (self, start, aim, 2, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, flash_index);
+		monster_fire_bullet(self, start, aim, 4, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, flash_index);
 
 		if (level.time >= self->monsterinfo.pausetime)
 			self->monsterinfo.aiflags &= ~AI_HOLD_FRAME;
@@ -1216,7 +1220,7 @@ void SP_monster_soldier_x (edict_t *self)
 
 /*QUAKED monster_soldier_light (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
 */
-void SP_monster_soldier_light (edict_t *self)
+void SP_monster_soldier_light (edict_t *self) //light guard
 {
 	if (deathmatch->value)
 	{
@@ -1233,13 +1237,14 @@ void SP_monster_soldier_light (edict_t *self)
 	gi.soundindex ("soldier/solatck2.wav");
 
 	self->s.skinnum = 0;
-	self->health = 20;
+	//self->health = 20;
+	self->health = 80; //BIGBOYMONS
 	self->gib_health = -30;
 }
 
 /*QUAKED monster_soldier (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
 */
-void SP_monster_soldier (edict_t *self)
+void SP_monster_soldier (edict_t *self) //shotgun soldier
 {
 	if (deathmatch->value)
 	{
@@ -1254,13 +1259,14 @@ void SP_monster_soldier (edict_t *self)
 	gi.soundindex ("soldier/solatck1.wav");
 
 	self->s.skinnum = 2;
-	self->health = 30;
+	//self->health = 30;
+	self->health = 150; //BIGBOYMONS
 	self->gib_health = -30;
 }
 
 /*QUAKED monster_soldier_ss (1 .5 0) (-16 -16 -24) (16 16 32) Ambush Trigger_Spawn Sight
 */
-void SP_monster_soldier_ss (edict_t *self)
+void SP_monster_soldier_ss (edict_t *self) //MG soldier
 {
 	if (deathmatch->value)
 	{
@@ -1275,6 +1281,7 @@ void SP_monster_soldier_ss (edict_t *self)
 	gi.soundindex ("soldier/solatck3.wav");
 
 	self->s.skinnum = 4;
-	self->health = 40;
+	//self->health = 40;
+	self->health = 100; //BIGBOYMONS
 	self->gib_health = -30;
 }

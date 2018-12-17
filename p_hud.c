@@ -431,6 +431,8 @@ void G_SetStats (edict_t *ent)
 	{
 		ent->client->ps.stats[STAT_TIMER_ICON] = gi.imageindex ("p_quad");
 		ent->client->ps.stats[STAT_TIMER] = (ent->client->quad_framenum - level.framenum)/10;
+		//ent->client->ps.stats[STAT_TIMER_ICON] = gi.imageindex("p_invulnerability");
+		//ent->client->ps.stats[STAT_TIMER] = (ent->client->invincible_framenum - level.framenum) / 10;
 	}
 	else if (ent->client->invincible_framenum > level.framenum)
 	{

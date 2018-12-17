@@ -274,7 +274,8 @@ void InfantryMachineGun (edict_t *self)
 		AngleVectors (vec, forward, NULL, NULL);
 	}
 
-	monster_fire_bullet (self, start, forward, 3, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, flash_number);
+	//monster_fire_bullet (self, start, forward, 3, 4, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, flash_number);
+	monster_fire_bullet(self, start, forward, 3, 8, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, flash_number); //BIGBOYMONS
 }
 
 void infantry_sight (edict_t *self, edict_t *other)
@@ -563,7 +564,8 @@ void SP_monster_infantry (edict_t *self)
 	VectorSet (self->mins, -16, -16, -24);
 	VectorSet (self->maxs, 16, 16, 32);
 
-	self->health = 100;
+	//self->health = 100;
+	self->health = 200; //BIGBOYMONS
 	self->gib_health = -40;
 	self->mass = 200;
 

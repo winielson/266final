@@ -1131,16 +1131,23 @@ void fire_punch(edict_t *self, vec3_t start, vec3_t aim, int reach, int damage, 
 		VectorMA(self->velocity, 75, forward, self->velocity); // Pull forward
 		VectorMA(self->velocity, 75, up, self->velocity); // Pull up a tad bit. You can't slide
 
-		// do the damage
-		T_Damage (tr.ent, self, self, vec3_origin, tr.ent->s.origin, vec3_origin, damage, kick / 2, DAMAGE_ENERGY, mod); // Time to Slice my friends
+		T_Damage (tr.ent, self, self, vec3_origin, tr.ent->s.origin, vec3_origin, damage, kick / 2, DAMAGE_ENERGY, mod); // do the damage
+
+		/*
+		if (self->client->is_quad && (self->flags == FL_NOTARGET))
+		{
+			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); //Tell them who you are when sneak attacking
+			gi.centerprintf(self, "Cloaked Attack x4 Damage\n");
+		}
+		*/
 		
-		if (self->client->cloaking)
+		if (self->client->cloaking && (self->flags == FL_NOTARGET))
 		{
 			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); //Tell them who you are when sneak attacking
 			gi.centerprintf(self, "Cloaked Attack x4 Damage\n");
 		}
 
-		if (self->client->crouch)
+		if (self->client->crouch && (self->flags == FL_NOTARGET))
 		{
 			gi.sound(self, CHAN_WEAPON, gi.soundindex("berserk/who.wav"), 1, ATTN_NORM, 0); //Tell them who you are when sneak attacking
 			gi.centerprintf(self, "Sneak Attack x2 Damage\n");

@@ -438,7 +438,9 @@ void SV_CalcBlend (edict_t *ent)
 	{
 		remaining = ent->client->quad_framenum - level.framenum;
 		if (remaining == 30)	// beginning to fade
-			gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage2.wav"), 1, ATTN_NORM, 0);
+			gi.sound(ent, CHAN_ITEM, gi.soundindex("insane/insane5.wav"), 1, ATTN_NORM, 0); //BIGBOYOVER
+			//gi.sound(ent, CHAN_ITEM, gi.soundindex("insane/insane11.wav"), 1, ATTN_NORM, 0); //BIGBOYOVER
+			//gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage2.wav"), 1, ATTN_NORM, 0);
 		if (remaining > 30 || (remaining & 4) )
 			SV_AddBlend (0, 0, 1, 0.08, ent->client->ps.blend);
 	}

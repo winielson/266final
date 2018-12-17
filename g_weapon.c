@@ -507,6 +507,24 @@ static void MNade_Explode(edict_t *ent)
 
 	VectorMA(ent->s.origin, -0.02, ent->velocity, origin);
 	gi.WriteByte(svc_temp_entity);
+
+	//GREEN PARTICLE EXPLOSIONSASJKFLHSDJHF
+	if (ent->waterlevel)
+	{
+		if (ent->groundentity)
+			gi.WriteByte(TE_BFG_BIGEXPLOSION);
+		else
+			gi.WriteByte(TE_BFG_BIGEXPLOSION);
+	}
+	else
+	{
+		if (ent->groundentity)
+			gi.WriteByte(TE_BFG_BIGEXPLOSION);
+		else
+			gi.WriteByte(TE_BFG_BIGEXPLOSION);
+	}
+
+	/*
 	if (ent->waterlevel)
 	{
 		if (ent->groundentity)
@@ -521,6 +539,7 @@ static void MNade_Explode(edict_t *ent)
 		else
 			gi.WriteByte(TE_ROCKET_EXPLOSION);
 	}
+	*/
 	gi.WritePosition(origin);
 	gi.multicast(ent->s.origin, MULTICAST_PHS);
 
@@ -557,8 +576,16 @@ static void MNade_Touch(edict_t *ent, edict_t *other, cplane_t *plane, csurface_
 	//when grenade hits enemy mnaded == true
 	other->mnaded ^= true;
 	FindTarget(other);
+
+	/* //GAME CRASHES WHEN NADE HITS BARRREL
+	if (!(other->isbarrel))
+		FindTarget(other);
+	*/
+	//if (!FindTarget(other))
+		//Grenade_Explode(ent);
 	//other->enemy = other;
-	Grenade_Explode(ent);
+
+	MNade_Explode(ent);
 }
 
 //BIGBOYEBRANGS took rocket_fire for explosive brangs

@@ -1160,5 +1160,6 @@ struct edict_s
 
 	//BIGBOYMNADE
 	qboolean	mnaded; //are monsters in radius of mnade
+	//qboolean	isbarrel;
 };
 

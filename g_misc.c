@@ -896,9 +896,12 @@ void barrel_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *s
 	float	ratio;
 	vec3_t	v;
 
+	//BIGBOYMNADE BARREL DEBUG
+	//self->isbarrel = 1;
+
 	if ((!other->groundentity) || (other->groundentity == self))
 		return;
-
+	
 	ratio = (float)other->mass / (float)self->mass;
 	VectorSubtract (self->s.origin, other->s.origin, v);
 	M_walkmove (self, vectoyaw(v), 20 * ratio * FRAMETIME);
@@ -909,6 +912,9 @@ void barrel_explode (edict_t *self)
 	vec3_t	org;
 	float	spd;
 	vec3_t	save;
+
+	//self->mnaded = 0;
+	//self->isbarrel = 1;
 
 	T_RadiusDamage (self, self->activator, self->dmg, NULL, self->dmg+40, MOD_BARREL);
 
@@ -985,6 +991,8 @@ void barrel_explode (edict_t *self)
 
 void barrel_delay (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
 {
+	//self->isbarrel = 1;
+
 	self->takedamage = DAMAGE_NO;
 	self->nextthink = level.time + 2 * FRAMETIME;
 	self->think = barrel_explode;

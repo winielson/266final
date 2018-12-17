@@ -1703,7 +1703,6 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		{
 			if (ent->client->cloaking)
 			{
-				//gi.centerprintf(ent, "Cloaked\n");
 				if (level.time > ent->client->cloakacttime) //when time it takes for cloak to enable is met (not instantly enabled)
 				{
 					//gi.centerprintf(ent, "Cloaked\n"); //reprints cloaked the whole time

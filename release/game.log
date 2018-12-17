@@ -1,14 +1,8 @@
-﻿Build started 12/17/2018 2:03:32 PM.
+﻿Build started 12/17/2018 2:37:13 PM.
      1>Project "C:\Program Files (x86)\Steam\steamapps\common\Quake 2\final\game.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Z7 /nologo /W1 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _WINDLL /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\release/" /Fd".\release/vc120.pdb" /Gd /TC /analyze- /errorReport:prompt g_spawn.c
-         g_spawn.c
-     1>g_spawn.c(807): warning C4047: 'function' : 'char *' differs in levels of indirection from 'char *[512]'
-     1>g_spawn.c(807): warning C4024: 'strncpy' : different types for formal and actual parameter 1
-     1>g_spawn.c(808): warning C4047: 'function' : 'char *' differs in levels of indirection from 'char *[512]'
-     1>g_spawn.c(808): warning C4024: 'strncat' : different types for formal and actual parameter 1
-     1>g_spawn.c(810): warning C4047: 'function' : 'const char *' differs in levels of indirection from 'char *[512]'
-     1>g_spawn.c(810): warning C4024: 'strncpy' : different types for formal and actual parameter 2
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /Z7 /nologo /W1 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _VC80_UPGRADE=0x0600 /D _WINDLL /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\release/" /Fd".\release/vc120.pdb" /Gd /TC /analyze- /errorReport:prompt g_cmds.c
+         g_cmds.c
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1186,5): warning MSB8012: TargetPath(C:\Program Files (x86)\Steam\steamapps\common\Quake 2\final\..\baseq2\game.dll) does not match the Linker's OutputFile property value (C:\Program Files (x86)\Steam\steamapps\common\Quake 2\release\gamex86.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1188,5): warning MSB8012: TargetName(game) does not match the Linker's OutputFile property value (gamex86). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
        Link:
@@ -66,4 +60,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.46
+Time Elapsed 00:00:00.50

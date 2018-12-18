@@ -510,7 +510,8 @@ void SP_monster_parasite (edict_t *self)
 	self->movetype = MOVETYPE_STEP;
 	self->solid = SOLID_BBOX;
 
-	self->health = 175;
+	self->health = 240;
+	//self->health = 175;
 	self->gib_health = -50;
 	self->mass = 250;
 

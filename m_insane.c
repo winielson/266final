@@ -628,7 +628,8 @@ void SP_misc_insane (edict_t *self)
 	VectorSet (self->mins, -16, -16, -24);
 	VectorSet (self->maxs, 16, 16, 32);
 
-	self->health = 100;
+	self->health = 175;
+	//self->health = 100;
 	self->gib_health = -50;
 	self->mass = 300;
 

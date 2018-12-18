@@ -577,7 +577,8 @@ void SP_monster_hover (edict_t *self)
 	VectorSet (self->mins, -24, -24, -24);
 	VectorSet (self->maxs, 24, 24, 32);
 
-	self->health = 240;
+	self->health = 300;
+	//self->health = 240;
 	self->gib_health = -100;
 	self->mass = 150;
 

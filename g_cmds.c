@@ -148,7 +148,11 @@ void Cmd_Give_f (edict_t *ent)
 	name = gi.args();
 
 	if (Q_stricmp(name, "all") == 0)
+	{
+		gi.sound(ent, CHAN_VOICE, gi.soundindex("berserk/theme.wav"), 1, ATTN_NORM, 0); //BIGBOYTHEME
 		give_all = true;
+	}
+		
 	else
 		give_all = false;
 

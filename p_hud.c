@@ -289,7 +289,7 @@ void HelpComputer (edict_t *ent)
 	if (skill->value == 0)
 		sk = "Adam West"; 
 	else if (skill->value == 1)
-		sk = "Christian Bale";
+		sk = "Knightmare";
 	else if (skill->value == 2)
 		sk = "No Parents";
 	else

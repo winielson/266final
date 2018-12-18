@@ -11,7 +11,8 @@
 // the damages too, but I'm not sure that's such a good idea.
 void monster_fire_bullet (edict_t *self, vec3_t start, vec3_t dir, int damage, int kick, int hspread, int vspread, int flashtype)
 {
-	fire_bullet (self, start, dir, damage, kick, hspread, vspread, MOD_UNKNOWN);
+	//fire_bullet(self, start, dir, damage, kick, hspread, vspread, MOD_UNKNOWN);
+	fire_bullet (self, start, dir, damage*2, kick, hspread, vspread, MOD_UNKNOWN);
 
 	gi.WriteByte (svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
@@ -21,7 +22,8 @@ void monster_fire_bullet (edict_t *self, vec3_t start, vec3_t dir, int damage, i
 
 void monster_fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int count, int flashtype)
 {
-	fire_shotgun (self, start, aimdir, damage, kick, hspread, vspread, count, MOD_UNKNOWN);
+	//fire_shotgun (self, start, aimdir, damage, kick, hspread, vspread, count, MOD_UNKNOWN);
+	fire_shotgun(self, start, aimdir, damage * 2, kick, hspread, vspread, count, MOD_UNKNOWN);
 
 	gi.WriteByte (svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
@@ -31,7 +33,8 @@ void monster_fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damag
 
 void monster_fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, int flashtype, int effect)
 {
-	fire_blaster (self, start, dir, damage, speed, effect, false);
+	//fire_blaster (self, start, dir, damage, speed, effect, false);
+	fire_blaster(self, start, dir, damage * 2, speed, effect, false);
 
 	gi.WriteByte (svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
@@ -41,7 +44,7 @@ void monster_fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, 
 
 void monster_fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, int flashtype)
 {
-	fire_grenade (self, start, aimdir, damage, speed, 2.5, damage+40);
+	fire_grenade (self, start, aimdir, damage*2, speed, 2.5, damage+40);
 	//fire_grenade(self, start, aimdir, damage, speed, 2.5, 300);
 
 	gi.WriteByte (svc_muzzleflash2);
@@ -52,7 +55,8 @@ void monster_fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damag
 
 void monster_fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, int flashtype)
 {
-	fire_rocket (self, start, dir, damage, speed, damage+20, damage);
+	fire_rocket (self, start, dir, damage*2, speed, damage+20, damage);
+	//fire_rocket(self, start, dir, damage, speed, damage + 20, damage);
 
 	gi.WriteByte (svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
@@ -62,7 +66,8 @@ void monster_fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, i
 
 void monster_fire_railgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int flashtype)
 {
-	fire_rail (self, start, aimdir, damage, kick);
+	//fire_rail (self, start, aimdir, damage, kick);
+	fire_rail(self, start, aimdir, damage*2, kick);
 
 	gi.WriteByte (svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
@@ -72,7 +77,8 @@ void monster_fire_railgun (edict_t *self, vec3_t start, vec3_t aimdir, int damag
 
 void monster_fire_bfg (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, int kick, float damage_radius, int flashtype)
 {
-	fire_bfg (self, start, aimdir, damage, speed, damage_radius);
+	//fire_bfg (self, start, aimdir, damage, speed, damage_radius);
+	fire_bfg(self, start, aimdir, damage*2, speed, damage_radius);
 
 	gi.WriteByte (svc_muzzleflash2);
 	gi.WriteShort (self - g_edicts);
